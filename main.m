@@ -2,9 +2,10 @@ clear
 clc
 close all
 format long g
-folder1 = fullfile('..','VFIToolkit-matlab-master');
-folder2 = fullfile('..','tools');
-addpath(genpath(folder1),folder2)
+% This is the folder where the VFI toolkit files are saved
+folder1 = 'C:\Users\aledi\Desktop\VFIToolkit-matlab-master';
+%folder2 = fullfile('..','tools');
+addpath(genpath(folder1))
 
 %% Set flags
 
@@ -22,8 +23,8 @@ par.delta  = 0.083; % Capital depreciation rate
 % HSV taxation. 
 % No taxes: lambda=1, tau=0
 % proportional taxes: lambda=1-taxrate, tau=0
-par.lambda_hsv = 0.9;
-par.tau_hsv    = 0.1;
+par.lambda_hsv = 1.0;
+par.tau_hsv    = 0.0;
 
 % Parameters for AR1 labor productivity z
 rho_z = 0.92;
