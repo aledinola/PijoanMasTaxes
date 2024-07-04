@@ -47,6 +47,7 @@ Params.K_to_L = 5.53;%mean(KL_init);
 
 % Solve for the stationary general equilbirium
 vfoptions=struct(); % Use default options for solving the value function (and policy fn)
+vfoptions.lowmemory = 1;
 simoptions=struct(); % Use default options for solving for stationary distribution
 %vfoptions.solnmethod = 'purediscretization_refinement';
 %vfoptions.solnmethod = 'purediscretization';
