@@ -3,7 +3,7 @@ clc
 close all
 format long g
 % This is the folder where the VFI toolkit files are saved
-folder1 = 'C:\Users\aledi\OneDrive\Documents\GitHub\VFIToolkit-matlab\VFIToolkit-matlab';
+folder1 = 'C:\Users\aledi\OneDrive\Desktop\vfi_toolkit\VFIToolkit-matlab';
 %folder2 = fullfile('..','tools');
 addpath(genpath(folder1))
 
@@ -40,7 +40,7 @@ n_a     = 601;
 a_grid = make_grid(a_min,a_max,n_a,a_curve,1);
 
 %grid for labor
-n_d    = 51;
+n_d    = 300;
 d_grid = linspace(0.001,0.999,n_d)';
 
 if do_pijoan==1
