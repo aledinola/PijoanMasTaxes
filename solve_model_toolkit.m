@@ -1,4 +1,4 @@
-function [p_eqm,pol,StationaryDist,agg,mom] = solve_model_toolkit(KL_init,par,grids)
+function [p_eqm,pol,StationaryDist,agg,mom] = solve_model_toolkit(par,grids)
 
 % p_eq: KL,r,w
 % agg: KK,LL,HH,YY
@@ -43,7 +43,7 @@ GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; %The requirement that t
 
 GEPriceParamNames={'K_to_L'};
 % Set initial value for K/L
-Params.K_to_L = 5.53;%mean(KL_init);
+Params.K_to_L = 5.5345;%mean(KL_init);
 
 % Solve for the stationary general equilbirium
 vfoptions=struct(); % Use default options for solving the value function (and policy fn)
@@ -52,7 +52,9 @@ simoptions=struct(); % Use default options for solving for stationary distributi
 %vfoptions.solnmethod = 'purediscretization_refinement';
 %vfoptions.solnmethod = 'purediscretization';
 heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
-
+heteroagentoptions.toleranceGEprices=1e-3; % default is 1e-4
+heteroagentoptions.toleranceGEcondns=1e-3; % default is 1e-4
+heteroagentoptions.fminalgo = 7;
 fprintf('Calculating price vector corresponding to the stationary general eqm \n')
 [p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 
@@ -140,8 +142,8 @@ mom.gini.wealth    = gini_wealth;
 
 % Cross-sectional correlations
 % Order: (k,h,z)
-mom.corr_h_z  =  CrossSectionCorr(2,3);
-mom.corr_k_z  =  CrossSectionCorr(1,3);
+mom.corr_h_z  =  CrossSectionCorr.hours.z;
+mom.corr_k_z  =  CrossSectionCorr.wealth.z;
 
 mom.shares = shares;
 

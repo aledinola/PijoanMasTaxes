@@ -1,9 +1,11 @@
+%% Pijoan-Mas (2006)
 clear
 clc
 close all
 format long g
 % This is the folder where the VFI toolkit files are saved
-folder1 = 'C:\Users\aledi\OneDrive\Desktop\vfi_toolkit\VFIToolkit-matlab';
+%folder1 = 'C:\Users\aledi\OneDrive\Desktop\vfi_toolkit\VFIToolkit-matlab';
+folder1 = 'C:\Users\aledi\OneDrive\Documents\GitHub\VFIToolkit-matlab';
 %folder2 = fullfile('..','tools');
 addpath(genpath(folder1))
 
@@ -36,7 +38,7 @@ sig_z = 0.21;
 a_curve = 2.0;
 a_min   = 1e-6;
 a_max   = 50;
-n_a     = 601;
+n_a     = 301;%601;
 a_grid = make_grid(a_min,a_max,n_a,a_curve,1);
 
 %grid for labor
@@ -85,10 +87,10 @@ par.muoptions = muoptions;
 %% Solve model
 % Given params, good initial interval for K/L is [5,6]
 % or [0.031363,0.045517] for interest rate r
-KL_init = [5.0,6.0]; 
+%KL_init = [5.0,6.0]; SET INSIDE solve_model_toolkit
 tic
 %[p_eq,pol,mu,agg,mom] = solve_model(KL_init,par,grids);
-[p_eq,pol,mu,agg,mom] = solve_model_toolkit(KL_init,par,grids);
+[p_eq,pol,mu,agg,mom] = solve_model_toolkit(par,grids);
 toc
 
 %% Display results
