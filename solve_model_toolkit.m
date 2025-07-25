@@ -1,4 +1,4 @@
-function [p_eqm,pol,StationaryDist,agg,mom] = solve_model_toolkit(par,grids)
+function [Params,pol,StationaryDist,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions)
 
 % p_eq: KL,r,w
 % agg: KK,LL,HH,YY
@@ -23,6 +23,9 @@ Params.delta  = par.delta;
 Params.lambda_hsv = par.lambda_hsv;
 Params.tau_hsv    = par.tau_hsv;
 
+% Initial guess for GE parameter
+Params.K_to_L = par.K_to_L;
+
 %% Setup toolkit inputs
 DiscountFactorParamNames={'beta'};
 
@@ -43,29 +46,30 @@ GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; %The requirement that t
 
 GEPriceParamNames={'K_to_L'};
 % Set initial value for K/L
-Params.K_to_L = 5.5345;%mean(KL_init);
+
 
 % Solve for the stationary general equilbirium
-vfoptions=struct(); % Use default options for solving the value function (and policy fn)
-vfoptions.lowmemory = 1;
-simoptions=struct(); % Use default options for solving for stationary distribution
-%vfoptions.solnmethod = 'purediscretization_refinement';
-%vfoptions.solnmethod = 'purediscretization';
-heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
-heteroagentoptions.toleranceGEprices=1e-3; % default is 1e-4
-heteroagentoptions.toleranceGEcondns=1e-3; % default is 1e-4
-heteroagentoptions.fminalgo = 7;
+
 fprintf('Calculating price vector corresponding to the stationary general eqm \n')
 [p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 
 disp(GeneralEqmCondn)
 
 %% Recompute at equil prices
-Params.K_to_L = p_eqm.K_to_L; % Put the equilibrium interest rate into Params so we can use it to calculate things based on equilibrium parameters
+if heteroagentoptions.maxiter>0
+    Params.K_to_L = p_eqm.K_to_L; 
+else
+    Params.K_to_L = par.K_to_L;
+end
 [Params.r, Params.w] = fun_prices(Params.K_to_L,Params);
 
 fprintf('Calculating various equilibrium objects \n')
+tic
 [~,Policy]=ValueFnIter_Case1(n_d,n_a,n_z,d_grid,a_grid,z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
+time_vfi = toc;
+disp(' ')
+fprintf('Time VFI (seconds): %.2f',time_vfi)
+disp(' ')
 % V is value function
 % Policy is policy function (but as an index of k_grid, not the actual values)
 
@@ -82,7 +86,8 @@ FnsToEvaluate.earnings = @(d,aprime,a,z,w) w*z*d;
 FnsToEvaluate.income   = @(d,aprime,a,z,r,w) w*z*d+r*a;
 FnsToEvaluate.wealth   = @(d,aprime,a,z,r,w) a;
 
-AggVars=EvalFnOnAgentDist_AggVars_Case1(StationaryDist, Policy, FnsToEvaluate,Params, [],n_d, n_a, n_z, d_grid, a_grid,z_grid);
+%AggVars=EvalFnOnAgentDist_AggVars_Case1(StationaryDist, Policy, FnsToEvaluate, Parameters, FnsToEvaluateParamNames, n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions, EntryExitParamNames, PolicyWhenExiting)
+AggVars=EvalFnOnAgentDist_AggVars_Case1(StationaryDist, Policy, FnsToEvaluate,Params, [],n_d, n_a, n_z, d_grid, a_grid,z_grid,simoptions);
 
 % AggVars contains the aggregate values of the 'FnsToEvaluate' (in this model aggregates are equal to the mean expectation over the agent distribution)
 % Currently the only FnsToEvaluate is assets, so we get aggregate capital stock
@@ -103,16 +108,17 @@ shares.earnings = AllStats.earnings.LorenzCurve([20,40,60,80,100])-[0;AllStats.e
 shares.income   = AllStats.income.LorenzCurve([20,40,60,80,100])-[0;AllStats.income.LorenzCurve([20,40,60,80])] ;
 shares.wealth   = AllStats.wealth.LorenzCurve([20,40,60,80,100])-[0;AllStats.wealth.LorenzCurve([20,40,60,80])] ;
 
-% Calculate cross-sectional correlations
-FnsToEvaluateExtra.wealth = @(d,aprime,a,z) a;
-FnsToEvaluateExtra.hours  = @(d,aprime,a,z) d;
-FnsToEvaluateExtra.z      = @(d,aprime,a,z) z;
-CrossSectionCorr = EvalFnOnAgentDist_CrossSectionCorr_Case1(StationaryDist, Policy, FnsToEvaluateExtra, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid);
+% % Calculate cross-sectional correlations
+% FnsToEvaluateExtra.wealth = @(d,aprime,a,z) a;
+% FnsToEvaluateExtra.hours  = @(d,aprime,a,z) d;
+% FnsToEvaluateExtra.z      = @(d,aprime,a,z) z;
+% 
+% CrossSectionCorr = EvalFnOnAgentDist_CrossSectionCorr_Case1(StationaryDist, Policy, FnsToEvaluateExtra, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid);
 
 %% Prepare Outputs
 
-pol_ind_d  = squeeze(Policy(1,:,:));
-pol_ind_ap = squeeze(Policy(2,:,:));
+pol_ind_d  = squeeze(Policy(1,:,:)); % d(a,z)
+pol_ind_ap = squeeze(Policy(2,:,:)); % a'(a,z)
 
 pol_d  = d_grid(pol_ind_d);
 pol_ap = a_grid(pol_ind_ap);
@@ -142,12 +148,9 @@ mom.gini.wealth    = gini_wealth;
 
 % Cross-sectional correlations
 % Order: (k,h,z)
-mom.corr_h_z  =  CrossSectionCorr.hours.z;
-mom.corr_k_z  =  CrossSectionCorr.wealth.z;
+mom.corr_h_z  =  NaN;%CrossSectionCorr.hours.z;
+mom.corr_k_z  =  NaN;%  CrossSectionCorr.wealth.z;
 
 mom.shares = shares;
-
-p_eqm.w = Params.w;
-p_eqm.r = Params.r;
 
 end %end function solve_model

@@ -4,14 +4,36 @@ clc
 close all
 format long g
 % This is the folder where the VFI toolkit files are saved
-%folder1 = 'C:\Users\aledi\OneDrive\Desktop\vfi_toolkit\VFIToolkit-matlab';
-folder1 = 'C:\Users\aledi\OneDrive\Documents\GitHub\VFIToolkit-matlab';
-%folder2 = fullfile('..','tools');
-addpath(genpath(folder1))
+mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
+addpath(genpath(mypath))
 
-%% Set flags
+%% Set computational options
+do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
+n_a       = 300; % No. grid points for assets
+n_d       = 51;  % No. grid points for labor supply
 
-do_pijoan = 1; % If 1, load shocks from Pijoan-Mas files, otherwise discretize
+% --- Value functions options
+vfoptions=struct(); 
+vfoptions.lowmemory     = 1;
+vfoptions.verbose       = 0;
+vfoptions.tolerance     = 1e-6;
+vfoptions.maxiter       = 500;
+vfoptions.howards       = 80; 
+vfoptions.maxhowards    = 500;
+vfoptions.howardsgreedy = 0;
+vfoptions.gridinterplayer = 1;
+vfoptions.ngridinterp     = 15;
+
+% Distribution options
+simoptions=struct(); % Use default options for solving for stationary distribution
+
+% Heteroagentoptions
+heteroagentoptions = struct();
+heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
+heteroagentoptions.toleranceGEprices=1e-4; % default is 1e-4
+heteroagentoptions.toleranceGEcondns=1e-4; % default is 1e-4
+heteroagentoptions.fminalgo = 1;
+heteroagentoptions.maxiter = 0;
 
 %% Set economic parameters
 
@@ -21,6 +43,9 @@ par.lambda = 0.856; % Weight of labor in util
 par.beta   = 0.945; % Discount factor
 par.theta  = 0.64;  % Labor share in Cobb-Douglas
 par.delta  = 0.083; % Capital depreciation rate
+
+% Initial guess for GE parameter/price
+par.K_to_L = 5.5345;
 
 % HSV taxation. 
 % No taxes: lambda=1, tau=0
@@ -38,15 +63,15 @@ sig_z = 0.21;
 a_curve = 2.0;
 a_min   = 1e-6;
 a_max   = 50;
-n_a     = 301;%601;
+
 a_grid = make_grid(a_min,a_max,n_a,a_curve,1);
 
 %grid for labor
-n_d    = 300;
 d_grid = linspace(0.001,0.999,n_d)';
 
 if do_pijoan==1
-
+    disp('Pijoan-Mas discretization of z with 7 points')
+    fprintf('n_a = %d, n_d = %d \n',n_a,n_d)
     z_grid_log = [-1.385493 -0.923662 -0.461831  0.000000  0.461831  0.923662  1.385493]';
     z_grid     = exp(z_grid_log);
     pi_z   =  [0.746464  0.252884  0.000652  0.000000  0.000000  0.000000  0.000000
@@ -61,6 +86,7 @@ if do_pijoan==1
     n_z = length(z_grid);
 
 else
+    disp('AR(1) discretization of z with n_z points')
     n_z = 7;
     [pi_z,z_grid_log] = markovapprox(rho_z,sig_z,0.0,3.0,n_z,0);
     z_grid     = exp(z_grid_log);
@@ -70,42 +96,36 @@ end
 % Pack grids into a struct
 grids = pack_into_struct(a_grid,d_grid,z_grid,pi_z,n_a,n_d,n_z);
 
-%% Set computational options
-vfoptions.do_howard = 1;
-vfoptions.n_howard  = 50;
-vfoptions.tol       = 1e-6;
-vfoptions.verbose   = 0;
-
-muoptions.tol     = 1e-9; 
-muoptions.maxiter = 50000;
-muoptions.verbose = 0;
-
-% Add these options to structure par
-par.vfoptions = vfoptions;
-par.muoptions = muoptions;
 
 %% Solve model
-% Given params, good initial interval for K/L is [5,6]
-% or [0.031363,0.045517] for interest rate r
-%KL_init = [5.0,6.0]; SET INSIDE solve_model_toolkit
-tic
-%[p_eq,pol,mu,agg,mom] = solve_model(KL_init,par,grids);
-[p_eq,pol,mu,agg,mom] = solve_model_toolkit(par,grids);
-toc
+%tic
+[Params,pol,mu,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions);
+%toc
 
 %% Display results
 
 disp('==================================================================')
 disp('PARAMETERS')
+fprintf('crra (Coeff of risk aversion)       : %f \n',par.crra) 
+fprintf('nu (Curvature labor utility)        : %f \n',par.nu)
+fprintf('lambda (Weight of labor in disutil) : %f \n',par.lambda)
+fprintf('beta (Discount factor)              : %f \n',par.beta) 
+fprintf('theta (Labor share in Cobb-Douglas) : %f \n',par.theta) 
+fprintf('delta (Capital depreciation rate)   : %f \n',par.delta) 
 fprintf('lambda_hsv : %f \n',par.lambda_hsv)
 fprintf('tau_hsv    : %f \n',par.tau_hsv)
+disp('------------------------------------')
+disp('GENERAL EQUILIBRIUM PRICES')
+fprintf('K_to_L : %f \n',Params.K_to_L)
+fprintf('r      : %f \n',Params.r)
+fprintf('w      : %f \n',Params.w)
 disp('------------------------------------')
 disp('MOMENTS')
 fprintf('Corr(h,z)  : %f \n',mom.corr_h_z)
 fprintf('CV(h)      : %f \n',mom.cv.hours)
 fprintf('Hours      : %f \n',agg.HH)
 fprintf('K/Y        : %f \n',agg.KK/agg.YY)
-fprintf('w*L/Y      : %f \n',p_eq.w*agg.LL/agg.YY)
+fprintf('w*L/Y      : %f \n',Params.w*agg.LL/agg.YY)
 fprintf('I/Y        : %f \n',agg.II/agg.YY)
 disp('------------------------------------')
 disp('CV')
@@ -141,6 +161,7 @@ fprintf('q5 wealth: %f \n',mom.shares.wealth(5))
 %% Plots
 
 pol_ap = pol.pol_ap;
+pol_d  = pol.pol_d;
 
 figure
 plot(a_grid,a_grid,'--','LineWidth',2)
@@ -159,5 +180,16 @@ plot(a_grid,sum(mu,2),'LineWidth',2)
 xlabel('assets')
 ylabel('density')
 title('Distribution ' )
+
+figure
+plot(a_grid,pol_d(:,1),'LineWidth',2)
+hold on
+plot(a_grid,pol_d(:,round(n_z/2)),'LineWidth',2)
+hold on
+plot(a_grid,pol_d(:,n_z),'LineWidth',2)
+legend('z_1','z_4','z_7')
+xlabel('Assets')
+ylabel('Hours worked')
+title('Policy function d(a,z) ' )
 
 
