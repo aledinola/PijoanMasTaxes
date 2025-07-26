@@ -26,6 +26,8 @@ vfoptions.ngridinterp     = 15;
 
 % Distribution options
 simoptions=struct(); % Use default options for solving for stationary distribution
+simoptions.gridinterplayer = vfoptions.gridinterplayer;
+simoptions.ngridinterp     = vfoptions.ngridinterp;
 
 % Heteroagentoptions
 heteroagentoptions = struct();
