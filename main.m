@@ -14,7 +14,7 @@ n_d       = 51;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
-vfoptions.lowmemory     = 1;
+vfoptions.lowmemory     = 0;
 vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-6;
 vfoptions.maxiter       = 500;
