@@ -1,4 +1,4 @@
-function [Params,pol,StationaryDist,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions)
+function [Params,Policy,StationaryDist,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions)
 
 % p_eq: KL,r,w
 % agg: KK,LL,HH,YY
@@ -116,14 +116,6 @@ shares.wealth   = AllStats.wealth.LorenzCurve([20,40,60,80,100])-[0;AllStats.wea
 % CrossSectionCorr = EvalFnOnAgentDist_CrossSectionCorr_Case1(StationaryDist, Policy, FnsToEvaluateExtra, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid);
 
 %% Prepare Outputs
-
-pol_ind_d  = squeeze(Policy(1,:,:)); % d(a,z)
-pol_ind_ap = squeeze(Policy(2,:,:)); % a'(a,z)
-
-pol_d  = d_grid(pol_ind_d);
-pol_ap = a_grid(pol_ind_ap);
-
-pol = pack_into_struct(pol_d,pol_ap);
 
 % Aggregate moments
 theta  = par.theta;

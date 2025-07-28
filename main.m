@@ -21,7 +21,7 @@ vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.gridinterplayer = 1;
+vfoptions.gridinterplayer = 0;
 vfoptions.ngridinterp     = 15;
 
 % Distribution options
@@ -101,8 +101,17 @@ grids = pack_into_struct(a_grid,d_grid,z_grid,pi_z,n_a,n_d,n_z);
 
 %% Solve model
 %tic
-[Params,pol,mu,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions);
+[Params,Policy,StatDist,agg,mom] = solve_model_toolkit(par,grids,vfoptions,simoptions,heteroagentoptions);
 %toc
+
+% Unpack Policy functions
+Policy   = gather(Policy);
+StatDist = gather(StatDist);
+pol_ind_d  = squeeze(Policy(1,:,:)); % d(a,z)
+pol_ind_ap = squeeze(Policy(2,:,:)); % a'(a,z)
+
+pol_d  = d_grid(pol_ind_d);
+pol_ap = a_grid(pol_ind_ap);
 
 %% Display results
 
@@ -162,9 +171,6 @@ fprintf('q5 wealth: %f \n',mom.shares.wealth(5))
 
 %% Plots
 
-pol_ap = pol.pol_ap;
-pol_d  = pol.pol_d;
-
 figure
 plot(a_grid,a_grid,'--','LineWidth',2)
 hold on
@@ -178,7 +184,7 @@ ylabel('aprime')
 title('Policy function a''(a,z) ' )
 
 figure
-plot(a_grid,sum(mu,2),'LineWidth',2)
+plot(a_grid,sum(StatDist,2),'LineWidth',2)
 xlabel('assets')
 ylabel('density')
 title('Distribution ' )
