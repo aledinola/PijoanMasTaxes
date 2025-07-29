@@ -21,7 +21,7 @@ vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.gridinterplayer = 0;
+vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 
 % Distribution options
@@ -32,10 +32,10 @@ simoptions.ngridinterp     = vfoptions.ngridinterp;
 % Heteroagentoptions
 heteroagentoptions = struct();
 heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
-heteroagentoptions.toleranceGEprices=1e-4; % default is 1e-4
-heteroagentoptions.toleranceGEcondns=1e-4; % default is 1e-4
-heteroagentoptions.fminalgo = 1;
-heteroagentoptions.maxiter = 0;
+heteroagentoptions.toleranceGEprices=1e-6; % default is 1e-4
+heteroagentoptions.toleranceGEcondns=1e-6; % default is 1e-4
+heteroagentoptions.fminalgo = 0;
+heteroagentoptions.maxiter = 30;
 
 %% Set economic parameters
 
@@ -47,7 +47,7 @@ par.theta  = 0.64;  % Labor share in Cobb-Douglas
 par.delta  = 0.083; % Capital depreciation rate
 
 % Initial guess for GE parameter/price
-par.K_to_L = 5.5345;
+par.K_to_L = 5.5387;
 
 % HSV taxation. 
 % No taxes: lambda=1, tau=0
