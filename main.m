@@ -20,7 +20,7 @@ vfoptions.tolerance     = 1e-6;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
-vfoptions.howardsgreedy = 0;
+vfoptions.howardsgreedy = 2;
 vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 
@@ -35,7 +35,7 @@ heteroagentoptions.verbose=1; % verbose means that you want it to give you feedb
 heteroagentoptions.toleranceGEprices=1e-6; % default is 1e-4
 heteroagentoptions.toleranceGEcondns=1e-6; % default is 1e-4
 heteroagentoptions.fminalgo = 0;
-heteroagentoptions.maxiter = 30;
+heteroagentoptions.maxiter = 0;
 
 %% Set economic parameters
 
@@ -105,13 +105,15 @@ grids = pack_into_struct(a_grid,d_grid,z_grid,pi_z,n_a,n_d,n_z);
 %toc
 
 % Unpack Policy functions
-Policy   = gather(Policy);
 StatDist = gather(StatDist);
-pol_ind_d  = squeeze(Policy(1,:,:)); % d(a,z)
-pol_ind_ap = squeeze(Policy(2,:,:)); % a'(a,z)
+PolicyValues=PolicyInd2Val_Case1(Policy,n_d,n_a,n_z,d_grid,a_grid,vfoptions);
 
-pol_d  = d_grid(pol_ind_d);
-pol_ap = a_grid(pol_ind_ap);
+pol_d  = gather(squeeze(PolicyValues(1,:,:))); % d(a,z)
+pol_ap = gather(squeeze(PolicyValues(2,:,:))); % a'(a,z)
+
+% Policy for consumption
+pol_c = Model_cons(pol_d,pol_ap,a_grid,z_grid',par.K_to_L,par.theta,par.delta,par.lambda_hsv,par.tau_hsv);
+
 
 %% Display results
 
@@ -199,5 +201,16 @@ legend('z_1','z_4','z_7')
 xlabel('Assets')
 ylabel('Hours worked')
 title('Policy function d(a,z) ' )
+
+figure
+plot(a_grid,pol_c(:,1),'LineWidth',2)
+hold on
+plot(a_grid,pol_c(:,round(n_z/2)),'LineWidth',2)
+hold on
+plot(a_grid,pol_c(:,n_z),'LineWidth',2)
+legend('z_1','z_4','z_7')
+xlabel('Assets')
+ylabel('Consumption')
+title('Policy function c(a,z) ' )
 
 
