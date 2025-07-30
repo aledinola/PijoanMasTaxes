@@ -20,7 +20,7 @@ vfoptions.tolerance     = 1e-6;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
-vfoptions.howardsgreedy = 2;
+vfoptions.howardsgreedy = 0;
 vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 
