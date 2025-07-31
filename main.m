@@ -8,6 +8,7 @@ mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 %% Set computational options
+do_GE     = 1;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
 n_a       = 700; % No. grid points for assets
 n_d       = 50;  % No. grid points for labor supply
@@ -23,6 +24,7 @@ vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
 vfoptions.gridinterplayer = 0;
 vfoptions.ngridinterp     = 15;
+%vfoptions.divideandconquer = 0;
 
 % Distribution options
 simoptions=struct(); % Use default options for solving for stationary distribution
@@ -35,17 +37,18 @@ heteroagentoptions.verbose=1; % verbose means that you want it to give you feedb
 heteroagentoptions.toleranceGEprices=1e-6; % default is 1e-4
 heteroagentoptions.toleranceGEcondns=1e-6; % default is 1e-4
 heteroagentoptions.fminalgo = 1;  % 0=fzero, 1=fminsearch, 8=lsqnonlin 
-heteroagentoptions.maxiter = 0;
+heteroagentoptions.maxiter = 100;
 
 %% Set economic parameters
 
 % Initial guess for GE parameter/price
 Params.K_to_L = 5.56527812096859;
 
+Params.beta   = 0.945362091782898; % Discount factor
+Params.lambda = 1.0;%0.856; % Weight of labor in util
 Params.crra   = 1.458; % Coeff of risk aversion
 Params.nu     = 2.833; % Curvature labor utility
-Params.lambda = 0.856; % Weight of labor in util
-Params.beta   = 0.945362091782898; % Discount factor
+
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
@@ -111,21 +114,28 @@ FnsToEvaluate.H = @(d,aprime,a,z) d;   % H, Hours of work
 % Inputs can be any parameter, price, or aggregate of the FnsToEvaluate
 GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; 
 % More GE conditions as targets
-GeneralEqmEqns.target_beta = @(K,L,theta) K/(K^(1-theta)*L^theta) - 3.0;
+GeneralEqmEqns.target_beta   = @(K,L,theta) K/(K^(1-theta)*L^theta) - 3.0;
+GeneralEqmEqns.target_lambda = @(H) H - 0.33;
 
-GEPriceParamNames = {'K_to_L','beta'};
+GEPriceParamNames = {'K_to_L','beta','lambda'};
 heteroagentoptions.constrain0to1 = {'beta'};
+heteroagentoptions.multiGEweights = [1,1,30];
+
 % Solve for the stationary general equilibrium
+if do_GE==1
+    fprintf('Calculating the stationary general eqm \n')
+    [p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 
-fprintf('Calculating the stationary general eqm \n')
-%[p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
-
-%disp('GeneralEqmCondn:')
-%disp(GeneralEqmCondn)
+    disp('GeneralEqmCondn:')
+    disp(GeneralEqmCondn)
+end
 
 %% Recompute at equil prices
-if heteroagentoptions.maxiter>0
+%if heteroagentoptions.maxiter>0
+if do_GE==1
     Params.K_to_L = p_eqm.K_to_L; 
+    Params.beta   = p_eqm.beta; 
+    Params.lambda = p_eqm.lambda; 
 end
 [Params.r, Params.w] = fun_prices(Params.K_to_L,Params.theta,Params.delta);
 
