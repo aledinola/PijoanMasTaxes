@@ -9,8 +9,8 @@ addpath(genpath(mypath))
 
 %% Set computational options
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
-n_a       = 1000; % No. grid points for assets
-n_d       = 100;  % No. grid points for labor supply
+n_a       = 700; % No. grid points for assets
+n_d       = 50;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
@@ -34,18 +34,18 @@ heteroagentoptions = struct();
 heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
 heteroagentoptions.toleranceGEprices=1e-6; % default is 1e-4
 heteroagentoptions.toleranceGEcondns=1e-6; % default is 1e-4
-heteroagentoptions.fminalgo = 0;  % 0=fzero, 1=fminsearch
+heteroagentoptions.fminalgo = 1;  % 0=fzero, 1=fminsearch, 8=lsqnonlin 
 heteroagentoptions.maxiter = 0;
 
 %% Set economic parameters
 
 % Initial guess for GE parameter/price
-Params.K_to_L = 5.536995;
+Params.K_to_L = 5.56527812096859;
 
 Params.crra   = 1.458; % Coeff of risk aversion
 Params.nu     = 2.833; % Curvature labor utility
 Params.lambda = 0.856; % Weight of labor in util
-Params.beta   = 0.945; % Discount factor
+Params.beta   = 0.945362091782898; % Discount factor
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
@@ -96,6 +96,9 @@ DiscountFactorParamNames={'beta'};
 ReturnFn = @(d,aprime,a,z,K_to_L,crra,lambda,nu,theta,delta) ...
     Model_ReturnFn(d,aprime,a,z,K_to_L,crra,lambda,nu,theta,delta);
 
+% --- Custom statistics as calibration targets
+%heteroagentoptions.CustomModelStats 
+
 % --- Create functions to be evaluated
 FnsToEvaluate.K = @(d,aprime,a,z) a;   % A, assets or capital
 FnsToEvaluate.L = @(d,aprime,a,z) z*d; % L, labor in efficiency units
@@ -105,18 +108,20 @@ FnsToEvaluate.H = @(d,aprime,a,z) d;   % H, Hours of work
 % Should be written as LHS of general eqm eqn minus RHS, so that the closer 
 % the value given by the function is to zero, the closer the general eqm 
 % condition is to holding.
-GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; %The requirement that the interest rate corresponds to the agg capital level
 % Inputs can be any parameter, price, or aggregate of the FnsToEvaluate
+GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; 
+% More GE conditions as targets
+GeneralEqmEqns.target_beta = @(K,L,theta) K/(K^(1-theta)*L^theta) - 3.0;
 
-GEPriceParamNames={'K_to_L'};
-
+GEPriceParamNames = {'K_to_L','beta'};
+heteroagentoptions.constrain0to1 = {'beta'};
 % Solve for the stationary general equilibrium
 
 fprintf('Calculating the stationary general eqm \n')
-[p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+%[p_eqm,~,GeneralEqmCondn]=HeteroAgentStationaryEqm_Case1(n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 
-disp('GeneralEqmCondn:')
-disp(GeneralEqmCondn)
+%disp('GeneralEqmCondn:')
+%disp(GeneralEqmCondn)
 
 %% Recompute at equil prices
 if heteroagentoptions.maxiter>0
@@ -162,6 +167,20 @@ shares.earnings = AllStats.earnings.LorenzCurve([20,40,60,80,100])-[0;AllStats.e
 shares.income   = AllStats.income.LorenzCurve([20,40,60,80,100])-[0;AllStats.income.LorenzCurve([20,40,60,80])] ;
 shares.wealth   = AllStats.K.LorenzCurve([20,40,60,80,100])-[0;AllStats.K.LorenzCurve([20,40,60,80])] ;
 
+%% Extra statistics by hand
+% Unpack Policy functions
+StatDist = gather(StatDist);
+
+pol_d  = gather(squeeze(PolicyValues(1,:,:))); % d(a,z)
+pol_ap = gather(squeeze(PolicyValues(2,:,:))); % a'(a,z)
+
+% Average hours by quintiles
+ave_hours = fun_hours_means(pol_d,StatDist);
+
+% Correlation between hours and productivity shock
+z_mat = repmat(z_grid',n_a,1);
+corr_h_z = fun_corr(pol_d,z_mat,StatDist);
+
 %% Prepare Outputs
 
 % Aggregate moments
@@ -177,20 +196,8 @@ cv.earnings = AllStats.earnings.StdDeviation/AllStats.earnings.Mean;
 cv.income   = AllStats.income.StdDeviation/AllStats.income.Mean;
 cv.wealth   = AllStats.K.StdDeviation/AllStats.K.Mean;
 
-% Cross-sectional correlations
-% Order: (k,h,z)
-corr_h_z  =  NaN;%CrossSectionCorr.hours.z;
-corr_k_z  =  NaN;%  CrossSectionCorr.wealth.z;
-
-% Unpack Policy functions
-StatDist = gather(StatDist);
-
-pol_d  = gather(squeeze(PolicyValues(1,:,:))); % d(a,z)
-pol_ap = gather(squeeze(PolicyValues(2,:,:))); % a'(a,z)
-
 % Policy for consumption
 pol_c = Model_cons(pol_d,pol_ap,a_grid,z_grid',Params.K_to_L,Params.theta,Params.delta);
-
 
 %% Display results on screen
 
@@ -227,10 +234,6 @@ fprintf('Gini(Hours)   : %f \n',ginic.hours)
 fprintf('Gini(Earnings): %f \n',ginic.earnings)
 fprintf('Gini(Income)  : %f \n',ginic.income)
 fprintf('Gini(Wealth)  : %f \n',ginic.wealth)
-disp('------------------------------------')
-disp('CORR')
-fprintf('corr(Hours,z) : %f \n',corr_h_z)
-fprintf('corr(Wealth,z): %f \n',corr_k_z)
 disp('------------------------------------')
 disp('SHARES EARNINGS')
 fprintf('q1 earnings: %f \n',shares.earnings(1))
@@ -276,9 +279,6 @@ fclose(fid);
 
 %% Replicate Table 2 of Pijoan-Mas (2006)
 
-% Define all numeric values
-q_hours_model = NaN(1,5);
-
 % Open file
 fid = fopen(fullfile('results','table2.tex'), 'w');
 
@@ -293,7 +293,7 @@ fprintf(fid, '\\midrule\n');
 % Hours
 fprintf(fid, '\\textbf{Hours} &   &  &   &  &  &  &  \\\\\n');
 fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.2f & %.2f & %.2f & %.2f & %.2f \\\\\n', ...
-        cv.hours, ginic.hours, q_hours_model);
+        cv.hours, ginic.hours, ave_hours);
 
 % Earnings
 fprintf(fid, '\\addlinespace\n');

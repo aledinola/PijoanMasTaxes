@@ -1,0 +1,35 @@
+function [outputArg1,outputArg2] = fun_hours_means(pol_hours,stat_dist)
+%Calculate average hours for each quintile q1,..,q5
+
+[n_a,n_z] = size(pol_hours);
+
+if ~isequal(size(stat_dist),size(pol_hours))
+    error('pol_hours and stat_dist have different shapes!')
+end
+
+pol_hours = reshape(pol_hours,[n_a*n_z,1]);
+stat_dist = reshape(stat_dist,[n_a*n_z,1]);
+
+[~,sort_ind] = sort(pol_hours);
+pol_hours = pol_hours(sort_ind);
+stat_dist = stat_dist(sort_ind);
+cum_stat_dist = cumsum(stat_dist);
+
+[~,q1_cut] = min(abs(cum_stat_dist-0.2));
+[~,q2_cut] = min(abs(cum_stat_dist-0.4));
+[~,q3_cut] = min(abs(cum_stat_dist-0.6));
+[~,q4_cut] = min(abs(cum_stat_dist-0.8));
+
+h_p20 = pol_hours(1);
+y_p40 = y(2);
+y_p60 = y(3);
+y_p80 = y(4);
+y_p90 = y(5);
+y_p99 = y(6);
+
+for x_c = 1:n_a*n_z
+    if pol_hours(x_c)<=
+
+end
+
+end %end function

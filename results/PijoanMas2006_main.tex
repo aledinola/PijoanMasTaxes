@@ -19,7 +19,7 @@
 	
 	\section*{Model}
 	
-	Here I present a brief description of the model in Pijoan-Mas (2006). Households face the following problem:
+	Here I present a brief description of the model in \cite{pijoan2006}. Households face the following problem:
 	
 	\begin{equation*}
 		V(a, \varepsilon) = \max_{c, a', h} \left\{ \frac{c^{1 - \sigma}}{1 - \sigma} + \lambda \frac{(1 - h)^{1 - \nu}}{1 - \nu} + \beta \sum_{\varepsilon'} \Gamma_{\varepsilon, \varepsilon'} V(a', \varepsilon') \right\}
@@ -68,27 +68,38 @@
 
 \section*{Replication results}
 
-	% Include the table file
-	\input{table1.tex}
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{original_table1}
+	\caption{Original Table 1 of Pijoan-Mas (2006)}
+\end{figure}
 
-	\input{table2.tex}
-	
-	\begin{figure}[!htbp]
-		\centering
-		\includegraphics[width=0.7\textwidth]{pol_hours.png}
-		\caption{Policy function for hours worked}
-		\label{fig:pol_hours}
-	\end{figure}
+\input{table1.tex}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{original_table2}
+	\caption{Original Table 2 of Pijoan-Mas (2006)}
+\end{figure}
+
+\input{table2.tex}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{pol_hours.png}
+	\caption{Policy function for hours worked}
+	\label{fig:pol_hours}
+\end{figure}
 
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[width=0.7\textwidth]{pol_cons.png}
 	\caption{Policy function for consumption}
-	\label{fig:pol_hours}
+	\label{fig:pol_cons}
 \end{figure}
-	
-	\section*{References}
-	
-	Pijoan-Mas, Josep, ``Precautionary Savings or Working Longer Hours?,'' \emph{Review of Economic Dynamics}, April 2006, 9(2), 326--352.
+		
+	%\nocite{pijoan2006}
+	\bibliographystyle{apalike} % or any style you prefer (e.g., plain, ieeetr, etc.)
+	\bibliography{references}   % this points to references.bib
 	
 \end{document}

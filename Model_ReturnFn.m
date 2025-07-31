@@ -12,8 +12,7 @@ F = -inf;
 
 if c>0
     % WARNING: this will not work if crra=1 and/or nu=1
-    F = (c^(1-crra)-1)/(1-crra);
-    F = F + lambda*((1-d_val)^(1-nu )-1)/(1-nu);
+    F = (c^(1-crra)-1)/(1-crra)+lambda*((1-d_val)^(1-nu )-1)/(1-nu);
 end % end if
 
 end %end function
