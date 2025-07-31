@@ -1,9 +1,6 @@
-function [r,w] = fun_prices(KL,par)
+function [r,w] = fun_prices(K_to_L,theta,delta)
 
-theta = par.theta;
-delta = par.delta;
-
-r = (1-theta)*KL^(-theta)-delta;
-w = theta*KL^(1-theta);
+r = (1-theta)*K_to_L^(-theta)-delta;
+w = theta*K_to_L^(1-theta);
 
 end
