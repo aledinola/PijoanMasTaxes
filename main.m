@@ -10,7 +10,7 @@ addpath(genpath(mypath))
 %% Set computational options
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
 n_a       = 300; % No. grid points for assets
-n_d       = 51;  % No. grid points for labor supply
+n_d       = 101;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
