@@ -8,3 +8,5 @@
 *.lot
 *.fls
 *.fdb_latexmk
+# matlab auxiliary files 
+*.asv
