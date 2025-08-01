@@ -1,4 +1,10 @@
 %% Pijoan-Mas (2006)
+% This program replicates most of the quantitative results of
+% Josep Pijoan-Mas, 2003. "Precautionary Savings or Working Longer Hours?,"
+% Specifically, it reproduces Table 1, Table 2 and Figure 1
+% The routine HeteroAgentStationaryEqm_Case1 chooses the parameters beta,
+% sigma, lambda, nu to match 4 calibration targets and finds the general
+% equilibrium, all in one.
 clear
 clc
 close all
@@ -8,10 +14,10 @@ mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 %% Set computational options
-do_GE     = 0;
+do_GE     = 1;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
-n_a       = 300; % No. grid points for assets
-n_d       = 50;  % No. grid points for labor supply
+n_a       = 700; % No. grid points for assets
+n_d       = 100;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
@@ -22,7 +28,7 @@ vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.gridinterplayer = 1;
+vfoptions.gridinterplayer = 0;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
@@ -34,33 +40,35 @@ simoptions.ngridinterp     = vfoptions.ngridinterp;
 % Heteroagentoptions
 heteroagentoptions = struct();
 heteroagentoptions.verbose=1; % verbose means that you want it to give you feedback on what is going on
-heteroagentoptions.toleranceGEprices=1e-6; % default is 1e-4
-heteroagentoptions.toleranceGEcondns=1e-6; % default is 1e-4
+heteroagentoptions.toleranceGEprices=1e-4; % default is 1e-4
+heteroagentoptions.toleranceGEcondns=1e-4; % default is 1e-4
 heteroagentoptions.fminalgo = 1;  % 0=fzero, 1=fminsearch, 8=lsqnonlin 
-heteroagentoptions.maxiter = 100;
+heteroagentoptions.maxiter = 1000;
 
 %% Set economic parameters
 
 % Initial guess for GE parameter/price
-Params.K_to_L = 5.56527812096859;
+Params.K_to_L = 5.5649;
 
-Params.beta   = 0.945362091782898; % Discount factor
-Params.lambda = 1.0;%0.856; % Weight of labor in util
-Params.crra   = 1.458; % Coeff of risk aversion
+% --- Preference parameters
+Params.beta   = 0.945; % Discount factor
+Params.sigma  = 1.458; % Coeff of risk aversion
 Params.nu     = 2.833; % Curvature labor utility
+Params.lambda = 0.856; % Weight of labor in util
 
+% --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
-% Parameters for AR1 labor productivity z
+% --- Parameters for AR1 labor productivity z. Not used if do_pijoan=1
 Params.rho_z = 0.92;
 Params.sig_z = 0.21;
 
 %% Set grids and shocks
 
 % Grid for assets
-a_curve = 2.0;
-a_min   = 1e-6;
+a_curve = 3.0;
+a_min   = 0;
 a_max   = 50;
 
 a_grid = make_grid(a_min,a_max,n_a,a_curve,1);
@@ -96,8 +104,8 @@ end
 DiscountFactorParamNames={'beta'};
 
 % --- Model payoff function
-ReturnFn = @(d,aprime,a,z,K_to_L,crra,lambda,nu,theta,delta) ...
-    Model_ReturnFn(d,aprime,a,z,K_to_L,crra,lambda,nu,theta,delta);
+ReturnFn = @(d,aprime,a,z,K_to_L,sigma,lambda,nu,theta,delta) ...
+    Model_ReturnFn(d,aprime,a,z,K_to_L,sigma,lambda,nu,theta,delta);
 
 % --- Custom statistics as calibration targets
 %heteroagentoptions.CustomModelStats 
@@ -114,12 +122,16 @@ FnsToEvaluate.H = @(d,aprime,a,z) d;   % H, Hours of work
 % Inputs can be any parameter, price, or aggregate of the FnsToEvaluate
 GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L; 
 % More GE conditions as targets
+% --- beta calibrated to match K/Y=3.0
 GeneralEqmEqns.target_beta   = @(K,L,theta) K/(K^(1-theta)*L^theta) - 3.0;
+% --- lambda calibrated to match H=0.33
 GeneralEqmEqns.target_lambda = @(H) H - 0.33;
+% --- sigma (crra) calibrated to match corr(hours,z)=0.02
 GeneralEqmEqns.target_sigma = @(corr_h_z) corr_h_z-0.02;
+% --- nu calibrated to match coefvar(hours)=0.22
 GeneralEqmEqns.target_nu = @(cv_hours) cv_hours - 0.22;
 
-GEPriceParamNames = {'K_to_L','beta','lambda','crra','nu'};
+GEPriceParamNames = {'K_to_L','beta','lambda','sigma','nu'};
 heteroagentoptions.constrain0to1 = {'beta'};
 heteroagentoptions.multiGEweights = [1,1,1,1,1];
 heteroagentoptions.CustomModelStats = @(V,Policy,StationaryDist,Params,FnsToEvaluate,n_d,n_a,n_z,d_grid,a_grid,z_gridvals,pi_z,heteroagentoptions,vfoptions,simoptions) ...
@@ -137,9 +149,10 @@ end
 %% Recompute at equil prices
 %if heteroagentoptions.maxiter>0
 if do_GE==1
-    Params.K_to_L = p_eqm.K_to_L; 
-    Params.beta   = p_eqm.beta; 
-    Params.lambda = p_eqm.lambda; 
+    for ii=1:numel(GEPriceParamNames)
+        name_ii = GEPriceParamNames{ii};
+        Params.(name_ii) = p_eqm.(name_ii); 
+    end
 end
 [Params.r, Params.w] = fun_prices(Params.K_to_L,Params.theta,Params.delta);
 
@@ -166,6 +179,7 @@ FnsToEvaluate.H = @(d,aprime,a,z) d;   % hours
 FnsToEvaluate.earnings = @(d,aprime,a,z,w) w*z*d;
 FnsToEvaluate.income   = @(d,aprime,a,z,r,w) w*z*d+r*a;
 
+simoptions.nquantiles=5;
 AllStats = EvalFnOnAgentDist_AllStats_Case1(StatDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 
 %TopWealthShares=100*(1-LorenzCurves.Wealth([80,95,99],1)); % Need the 20,5, and 1 top shares for Tables of Huggett (1996)
@@ -189,10 +203,13 @@ pol_d  = gather(squeeze(PolicyValues(1,:,:))); % d(a,z)
 pol_ap = gather(squeeze(PolicyValues(2,:,:))); % a'(a,z)
 
 % Average hours by quintiles
-ave_hours = fun_hours_means(pol_d,StatDist);
+%ave_hours = fun_hours_means(pol_d,StatDist);
+ave_hours = AllStats.H.QuantileMeans;
+% Compare ave_hours with AllStats.H.QuantileMeans
+%disp([ave_hours,AllStats.H.QuantileMeans])
 
 % Correlation between hours and productivity shock
-z_mat = repmat(z_grid',n_a,1);
+z_mat    = repmat(z_grid',n_a,1);
 corr_h_z = fun_corr(pol_d,z_mat,StatDist);
 
 %% Prepare Outputs
@@ -217,7 +234,7 @@ pol_c = Model_cons(pol_d,pol_ap,a_grid,z_grid',Params.K_to_L,Params.theta,Params
 
 disp('==================================================================')
 disp('PARAMETERS')
-fprintf('crra (Coeff of risk aversion)       : %f \n',Params.crra) 
+fprintf('sigma (Coeff of risk aversion)       : %f \n',Params.sigma) 
 fprintf('nu (Curvature labor utility)        : %f \n',Params.nu)
 fprintf('lambda (Weight of labor in disutil) : %f \n',Params.lambda)
 fprintf('beta (Discount factor)              : %f \n',Params.beta) 
@@ -276,7 +293,7 @@ fprintf(fid, 'Parameter & Description & Target & Value \\\\\n');
 fprintf(fid, '\\midrule\n');
 
 % Write each row manually using variables
-fprintf(fid, '$\\sigma$  & Coeff. risk aversion   & corr(h,eps)= %.3f & %.3f \\\\\n', corr_h_z,      Params.crra);
+fprintf(fid, '$\\sigma$  & Coeff. risk aversion   & corr(h,eps)= %.3f & %.3f \\\\\n', corr_h_z,      Params.sigma);
 fprintf(fid, '$\\nu$     & Inverse elast. leisure & cv(h)= %.3f       & %.3f \\\\\n', cv.hours,      Params.nu);
 fprintf(fid, '$\\lambda$ & Weight of leisure      & H= %.3f           & %.3f \\\\\n', agg.HH,        Params.lambda);
 fprintf(fid, '$\\beta$   & Discount factor        & K/Y= %.3f         & %.3f \\\\\n', agg.KK/agg.YY, Params.beta);

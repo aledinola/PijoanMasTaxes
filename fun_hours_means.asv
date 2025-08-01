@@ -36,16 +36,10 @@ q5_ind = p80_cut+1:numel(stat_dist);
 
 
 ave_hours(1) = sum(pol_hours(q1_ind).*stat_dist(q1_ind));
-ave_hours(2) = sum(pol_hours(q2_ind).*stat_dist(q2_ind));
-ave_hours(3) = sum(pol_hours(q3_ind).*stat_dist(q3_ind));
-ave_hours(4) = sum(pol_hours(q4_ind).*stat_dist(q4_ind));
-ave_hours(5) = sum(pol_hours(q5_ind).*stat_dist(q5_ind));
-
-mass(1) = sum(stat_dist(q1_ind));
-mass(2) = sum(stat_dist(q2_ind));
-mass(3) = sum(stat_dist(q3_ind));
-mass(4) = sum(stat_dist(q4_ind));
-mass(5) = sum(stat_dist(q5_ind));
+ave_hours(1) = sum(pol_hours(1:p20_cut).*stat_dist(1:p20_cut));
+ave_hours(1) = sum(pol_hours(1:p20_cut).*stat_dist(1:p20_cut));
+ave_hours(1) = sum(pol_hours(1:p20_cut).*stat_dist(1:p20_cut));
+ave_hours(1) = sum(pol_hours(1:p20_cut).*stat_dist(1:p20_cut));
 
 % n_x = n_a*n_z;
 % for ix = 1:n_x
