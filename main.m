@@ -8,9 +8,9 @@ mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 %% Set computational options
-do_GE     = 1;
+do_GE     = 0;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
-n_a       = 700; % No. grid points for assets
+n_a       = 300; % No. grid points for assets
 n_d       = 50;  % No. grid points for labor supply
 
 % --- Value functions options
@@ -22,7 +22,7 @@ vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.gridinterplayer = 0;
+vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
@@ -116,10 +116,14 @@ GeneralEqmEqns.CapitalMarket = @(K_to_L,K,L) K_to_L-K/L;
 % More GE conditions as targets
 GeneralEqmEqns.target_beta   = @(K,L,theta) K/(K^(1-theta)*L^theta) - 3.0;
 GeneralEqmEqns.target_lambda = @(H) H - 0.33;
+GeneralEqmEqns.target_sigma = @(corr_h_z) corr_h_z-0.02;
+GeneralEqmEqns.target_nu = @(cv_hours) cv_hours - 0.22;
 
-GEPriceParamNames = {'K_to_L','beta','lambda'};
+GEPriceParamNames = {'K_to_L','beta','lambda','crra','nu'};
 heteroagentoptions.constrain0to1 = {'beta'};
-heteroagentoptions.multiGEweights = [1,1,30];
+heteroagentoptions.multiGEweights = [1,1,1,1,1];
+heteroagentoptions.CustomModelStats = @(V,Policy,StationaryDist,Params,FnsToEvaluate,n_d,n_a,n_z,d_grid,a_grid,z_gridvals,pi_z,heteroagentoptions,vfoptions,simoptions) ...
+    fun_custom_stats(V,Policy,StationaryDist,Params,FnsToEvaluate,n_d,n_a,n_z,d_grid,a_grid,z_gridvals,pi_z,heteroagentoptions,vfoptions,simoptions);
 
 % Solve for the stationary general equilibrium
 if do_GE==1

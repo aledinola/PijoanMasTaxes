@@ -15,8 +15,9 @@ custom_stats = struct();
 
 % --- TARGET 1 
 % Correlation between hours and productivity shock
-z_mat = repmat(z_grid',n_a,1);
-custom_stats.corr_h_z = fun_corr(pol_d,z_mat,StatDist);
+z_mat = repmat(z_gridvals',n_a,1);
+pol_d  = d_grid(squeeze(Policy(1,:,:))); % d(a,z)
+custom_stats.corr_h_z = fun_corr(pol_d,z_mat,StationaryDist);
 
 AllStats=EvalFnOnAgentDist_AllStats_Case1(StationaryDist,Policy,FnsToEvaluate,Params,[],n_d,n_a,n_z,d_grid,a_grid,z_gridvals,simoptions);
 
