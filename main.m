@@ -14,7 +14,7 @@ mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 %% Set computational options
-do_GE     = 1;
+do_GE     = 0;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
 n_a       = 700; % No. grid points for assets
 n_d       = 100;  % No. grid points for labor supply
@@ -71,7 +71,7 @@ a_curve = 3.0;
 a_min   = 0;
 a_max   = 50;
 
-a_grid = make_grid(a_min,a_max,n_a,a_curve,1);
+a_grid = a_min+(a_max-a_min)*(linspace(0,1,n_a).^a_curve)';
 
 %grid for labor
 d_grid = linspace(0.001,0.999,n_d)';
