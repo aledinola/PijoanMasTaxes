@@ -10,19 +10,19 @@ clc
 close all
 format long g
 % This is the folder where the VFI toolkit files are saved
-mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
+mypath = 'C:\Users\dinolaa\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 %% Set computational options
 do_GE     = 0;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
-n_a       = 700; % No. grid points for assets
-n_d       = 100;  % No. grid points for labor supply
+n_a       = 100; % No. grid points for assets
+n_d       = 10;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 0;
+vfoptions.verbose       = 1;
 vfoptions.tolerance     = 1e-6;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
