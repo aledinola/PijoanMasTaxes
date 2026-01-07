@@ -245,7 +245,8 @@ corr_a_z = fun_corr(pol_ap, z_mat, StatDist);
 
 FnsToEvaluateCorr.hours = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
-CorrTransProbs=EvalFnOnAgentDist_CorrTransProbs_InfHorz(StatDist, Policy, FnsToEvaluateCorr, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, simoptions);
+Corr=EvalFnOnAgentDist_CrossSectionCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
+%CorrTransProbs=EvalFnOnAgentDist_CorrTransProbs_InfHorz(StatDist, Policy, FnsToEvaluateCorr, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, simoptions);
 
 %% Aggregate moments and dispersion
 
