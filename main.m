@@ -248,8 +248,7 @@ corr_a_z = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
 FnsToEvaluateCorr.hours = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
 FnsToEvaluateCorr.wealth = @(d, aprime, a, z) a;
-Corr=EvalFnOnAgentDist_CrossSectionCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
-%CorrTransProbs=EvalFnOnAgentDist_CorrTransProbs_InfHorz(StatDist, Policy, FnsToEvaluateCorr, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, simoptions);
+Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 
 corr_h_z_check = Corr.hours.CorrelationWith.productivity;
 corr_a_z_check = Corr.wealth.CorrelationWith.productivity;
