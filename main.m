@@ -36,7 +36,7 @@ n_d       = 50;  % No. grid points for labor supply
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 1;
+vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-9;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
@@ -237,16 +237,22 @@ pol_ap = gather(reshape(PolicyValues(2, :, :), [n_a, n_z])); % a'(a,z)
 % Average hours by quintile
 ave_hours = AllStats.H.QuantileMeans;
 
+%% Correlation statistics: can use either user-written function fun_corr or 
+% toolkit function EvalFnOnAgentDist_CrossSectionCorr_InfHorz
 % Correlation between hours and productivity shocks
 z_mat    = repmat(z_grid', n_a, 1);
 corr_h_z = fun_corr(pol_d, z_mat, StatDist);
 % Correlation between wealth and productivity shocks
-corr_a_z = fun_corr(pol_ap, z_mat, StatDist);
+corr_a_z = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
 
 FnsToEvaluateCorr.hours = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
+FnsToEvaluateCorr.wealth = @(d, aprime, a, z) a;
 Corr=EvalFnOnAgentDist_CrossSectionCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 %CorrTransProbs=EvalFnOnAgentDist_CorrTransProbs_InfHorz(StatDist, Policy, FnsToEvaluateCorr, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, simoptions);
+
+corr_h_z_check = Corr.hours.CorrelationWith.productivity;
+corr_a_z_check = Corr.wealth.CorrelationWith.productivity;
 
 %% Aggregate moments and dispersion
 
@@ -314,6 +320,11 @@ fprintf('q2 wealth                               : %f \n', shares.wealth(2));
 fprintf('q3 wealth                               : %f \n', shares.wealth(3));
 fprintf('q4 wealth                               : %f \n', shares.wealth(4));
 fprintf('q5 wealth                               : %f \n', shares.wealth(5));
+disp('------------------------------------');
+disp('SHARES WEALTH');
+fprintf('Corr(h,z) hours and product             : %f \n', corr_h_z);
+fprintf('Corr(a,z) wealth and product            : %f \n', corr_a_z);
+
 
 %% Replicate Table 1 of Pijoan-Mas (2006)  (LaTeX)
 
