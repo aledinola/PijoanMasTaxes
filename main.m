@@ -239,19 +239,30 @@ ave_hours = AllStats.H.QuantileMeans;
 
 %% Correlation statistics: can use either user-written function fun_corr or 
 % toolkit function EvalFnOnAgentDist_CrossSectionCorr_InfHorz
+% Pijoan-Mas computes corr(h,eps) and corr(a,eps) 
 % Correlation between hours and productivity shocks
-z_mat    = repmat(z_grid', n_a, 1);
-corr_h_z = fun_corr(pol_d, z_mat, StatDist);
 % Correlation between wealth and productivity shocks
-corr_a_z = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
 
+% --- Toolkit command for correlation
 FnsToEvaluateCorr.hours = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
 FnsToEvaluateCorr.wealth = @(d, aprime, a, z) a;
 Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 
-corr_h_z_check = Corr.hours.CorrelationWith.productivity;
-corr_a_z_check = Corr.wealth.CorrelationWith.productivity;
+corr_h_z = Corr.hours.CorrelationWith.productivity;
+corr_a_z = Corr.wealth.CorrelationWith.productivity;
+
+% --- My own function for correlation
+z_mat     = repmat(z_grid', n_a, 1);
+corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
+corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
+
+if abs(corr_h_z-corr_h_z2)>1e-6
+    warning('corr_h_z')
+end
+if abs(corr_a_z-corr_a_z2)>1e-6
+    warning('corr_a_z')
+end
 
 %% Aggregate moments and dispersion
 
