@@ -7,10 +7,7 @@
 % sigma, lambda, nu to match 4 calibration targets and finds the general
 % equilibrium, all in one.
 
-clear
-clc
-close all
-format long g
+clear,clc,close all,format long g
 
 %% Paths and saving options
 
@@ -36,12 +33,13 @@ n_d       = 50;  % No. grid points for labor supply
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 0;
+vfoptions.verbose       = 1;
 vfoptions.tolerance     = 1e-9;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
+vfoptions.howardssparse = 1;
 vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
@@ -201,11 +199,11 @@ PolicyValues = PolicyInd2Val_Case1(Policy, n_d, n_a, n_z, d_grid, a_grid, vfopti
 StatDist = StationaryDist_Case1(Policy, n_d, n_a, n_z, pi_z, simoptions);
 
 % --- Additional functions to evaluate
-FnsToEvaluate.K        = @(d, aprime, a, z) a;
-FnsToEvaluate.L        = @(d, aprime, a, z) z .* d;
-FnsToEvaluate.H        = @(d, aprime, a, z) d;
-FnsToEvaluate.earnings = @(d, aprime, a, z, w) w .* z .* d;
-FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w .* z .* d + r .* a;
+FnsToEvaluate.K        = @(d, aprime, a, z) a;    % assets
+FnsToEvaluate.L        = @(d, aprime, a, z) z*d;  % labor in effic units
+FnsToEvaluate.H        = @(d, aprime, a, z) d;    % hours worked
+FnsToEvaluate.earnings = @(d, aprime, a, z, w) w*z*d; % labor earnings
+FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w*z*d + r*a; % income
 
 simoptions.nquantiles = 5;
 AllStats = EvalFnOnAgentDist_AllStats_Case1( ...
