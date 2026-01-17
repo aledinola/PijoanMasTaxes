@@ -28,18 +28,18 @@ end
 do_GE     = 0;
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
 n_a       = 600; % No. grid points for assets
-n_d       = 50;  % No. grid points for labor supply
+n_d       = 51;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 1;
+vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-9;
 vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.howardssparse = 1;
+vfoptions.howardssparse = 0;
 vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;

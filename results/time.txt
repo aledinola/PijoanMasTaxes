@@ -1,0 +1,9 @@
+Pijoan-Mas with n_a=600, n_d=50, n_z=7 
+gridinterplayer=1, ngridinterp=15
+
+
+Run-times interpolation in seconds:
+howardssparse=0, 2.65
+howardssparse=1, 3.36
+
+2.46
