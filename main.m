@@ -40,7 +40,7 @@ vfoptions.howards       = 80;
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 1;
-vfoptions.gridinterplayer = 1;
+vfoptions.gridinterplayer = 0;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
