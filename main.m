@@ -25,7 +25,7 @@ end
 
 %% Set computational options
 
-do_GE     = 0;
+do_GE     = 0;   % 0=solve model at given GE prices,1=solve general equil.
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
@@ -35,12 +35,12 @@ vfoptions=struct();
 vfoptions.lowmemory     = 0;
 vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-9;
-vfoptions.maxiter       = 500;
+vfoptions.maxiter       = 100;
 vfoptions.howards       = 80; 
 vfoptions.maxhowards    = 500;
 vfoptions.howardsgreedy = 0;
-vfoptions.howardssparse = 1;
-vfoptions.gridinterplayer = 0;
+vfoptions.howardssparse = 0;
+vfoptions.gridinterplayer = 1;
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
@@ -204,6 +204,7 @@ FnsToEvaluate.L        = @(d, aprime, a, z) z*d;  % labor in effic units
 FnsToEvaluate.H        = @(d, aprime, a, z) d;    % hours worked
 FnsToEvaluate.earnings = @(d, aprime, a, z, w) w*z*d; % labor earnings
 FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w*z*d + r*a; % income
+FnsToEvaluate.C        = @(d,aprime,a,z,K_to_L,theta,delta) Model_cons(d,aprime,a,z,K_to_L,theta,delta); % consumption
 
 simoptions.nquantiles = 5;
 AllStats = EvalFnOnAgentDist_AllStats_Case1( ...
@@ -226,11 +227,18 @@ shares.wealth   = AllStats.K.LorenzCurve([20, 40, 60, 80, 100]) ...
 
 %% Extra statistics
 
-% Unpack policy functions
+% Unpack policy functions for hours and a'
 StatDist = gather(StatDist);
-
 pol_d  = gather(reshape(PolicyValues(1, :, :), [n_a, n_z])); % d(a,z)
 pol_ap = gather(reshape(PolicyValues(2, :, :), [n_a, n_z])); % a'(a,z)
+
+% Policy for consumption
+ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_Case1(Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
+pol_c = ValOnGrid.C;
+
+if ~isequal(size(pol_c),[n_a,n_z])
+    error('Policy fir consumption computed by ValuesOnGrid is not correct')
+end
 
 % Average hours by quintile
 ave_hours = AllStats.H.QuantileMeans;
@@ -242,9 +250,9 @@ ave_hours = AllStats.H.QuantileMeans;
 % Correlation between wealth and productivity shocks
 
 % --- Toolkit command for correlation
-FnsToEvaluateCorr.hours = @(d, aprime, a, z) d;
+FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
-FnsToEvaluateCorr.wealth = @(d, aprime, a, z) a;
+FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
 Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 
 corr_h_z = Corr.hours.CorrelationWith.productivity;
@@ -275,9 +283,6 @@ cv.hours    = AllStats.H.StdDeviation        / AllStats.H.Mean;
 cv.earnings = AllStats.earnings.StdDeviation / AllStats.earnings.Mean;
 cv.income   = AllStats.income.StdDeviation   / AllStats.income.Mean;
 cv.wealth   = AllStats.K.StdDeviation        / AllStats.K.Mean;
-
-% Policy for consumption
-pol_c = Model_cons(pol_d, pol_ap, a_grid, z_grid', Params.K_to_L, Params.theta, Params.delta);
 
 %% Display results on screen
 
