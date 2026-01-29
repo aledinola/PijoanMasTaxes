@@ -1,4 +1,7 @@
 %% Pijoan-Mas (2006)
+% TODO: For this set of parameters, check two methods for VFI with interp:
+% ValueFnIter_Refine_postGI_raw (default): ALL GOOD
+% ValueFnIter_postGI_sparse_raw: DOES NOT CONVERGE
 % This program replicates most of the quantitative results of
 % Josep Pijoan-Mas, 2006. "Precautionary Savings or Working Longer Hours?"
 % Specifically, it reproduces Table 1, Table 2 and Figure 1.
@@ -16,7 +19,7 @@ mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
 addpath(genpath(mypath))
 
 % Flag for saving output (tables and figures)
-do_save     = 0;              % Set to 1 to save LaTeX tables and figures
+do_save     = 1;              % Set to 1 to save LaTeX tables and figures
 results_dir = 'results';      % Folder for saved output
 
 if do_save == 1 && ~exist(results_dir, 'dir')
@@ -33,11 +36,12 @@ n_d       = 51;  % No. grid points for labor supply
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 0;
+vfoptions.verbose       = 1;
 vfoptions.tolerance     = 1e-9;
-vfoptions.maxiter       = 100;
+vfoptions.damp          = 0.9;
+vfoptions.maxiter       = 500;
 vfoptions.howards       = 80; 
-vfoptions.maxhowards    = 500;
+vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
 vfoptions.gridinterplayer = 1;
@@ -62,12 +66,12 @@ heteroagentoptions.maxiter                  = 1000;
 %% Set economic parameters
 
 % Initial guess for GE parameter/price
-Params.K_to_L = 5.5649;
+Params.K_to_L = 5.843145;%5.5649;
 
 % --- Preference parameters
 Params.beta   = 0.945; % Discount factor
 Params.sigma  = 1.458; % Coefficient of relative risk aversion
-Params.nu     = 2.833; % Curvature of labor disutility
+Params.nu     = 2.9747;%2.833; % Curvature of labor disutility
 Params.lambda = 0.856; % Weight of labor in utility
 
 % --- Technology parameters
