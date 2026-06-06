@@ -3,9 +3,9 @@
 % Josep Pijoan-Mas, 2006. "Precautionary Savings or Working Longer Hours?"
 % Specifically, it reproduces Table 1, Table 2 and Figure 1.
 %
-% The routine HeteroAgentStationaryEqm_Case1 chooses the parameters beta,
-% sigma, lambda, nu to match 4 calibration targets and finds the general
-% equilibrium, all in one.
+% The parameters are fixed at the Pijoan-Mas (2006) calibrated values.
+% The general equilibrium search is written in terms of r, which is
+% equivalent to searching over K/L through the firm's FOC.
 
 clear,clc,close all,format long g
 
@@ -25,8 +25,8 @@ end
 
 %% Set computational options
 
-do_GE     = 0;   % 0=solve model at given GE prices,1=solve general equil.
-do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files, otherwise discretize
+do_GE     = 1;   % 0=solve at fixed K/L, 1=solve GE over r
+do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
 
@@ -61,18 +61,28 @@ heteroagentoptions.maxiter                  = 100;
 
 %% Set economic parameters
 
-% Initial guess for GE parameter/price
-Params.K_to_L = 5.843145;%5.5649;
-
 % --- Preference parameters
 Params.beta   = 0.945; % Discount factor
 Params.sigma  = 1.458; % Coefficient of relative risk aversion
-Params.nu     = 2.9747;%2.833; % Curvature of labor disutility
+Params.nu     = 2.833; % Curvature of labor disutility
 Params.lambda = 0.856; % Weight of labor in utility
 
 % --- Technology parameters
-Params.theta  = 0.64;  % Labor share in Cobb–Douglas
+Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
+
+% Paper targets used to report calibration and data comparisons.
+Targets.corr_h_z = 0.02;
+Targets.cv_h     = 0.22;
+Targets.H        = 0.33;
+Targets.K_to_Y   = 3.00;
+Targets.wL_to_Y  = 0.64;
+Targets.I_to_Y   = 0.25;
+
+% Fixed-K/L runs use the paper target K/Y=3. In GE mode this is the
+% initial price guess because K/Y=(K/L)^theta with Cobb-Douglas production.
+Params.K_to_L = Targets.K_to_Y^(1 / Params.theta);
+[Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
 
 % --- Parameters for AR(1) labor productivity z (not used if do_pijoan = 1)
 Params.rho_z = 0.92;
@@ -122,9 +132,11 @@ end
 
 DiscountFactorParamNames = {'beta'};
 
-% --- Model payoff function
-ReturnFn = @(d, aprime, a, z, K_to_L, sigma, lambda, nu, theta, delta) ...
-    Model_ReturnFn(d, aprime, a, z, K_to_L, sigma, lambda, nu, theta, delta);
+% --- Model payoff function and GE price object
+% The GE variable is r. This is equivalent to searching over K/L because the
+% firm's FOC maps r one-to-one into K/L.
+ReturnFn = @(d, aprime, a, z, r, sigma, lambda, nu, theta, delta) ...
+    Model_ReturnFn(d, aprime, a, z, r, sigma, lambda, nu, theta, delta);
 
 % --- Functions to evaluate on the distribution
 FnsToEvaluate.K = @(d, aprime, a, z) a;   % Assets / capital
@@ -132,36 +144,21 @@ FnsToEvaluate.L = @(d, aprime, a, z) z*d; % Labor in efficiency units
 FnsToEvaluate.H = @(d, aprime, a, z) d;   % Hours of work
 
 % --- General equilibrium conditions
-% Conditions are written as LHS - RHS = 0 at equilibrium.
-GeneralEqmEqns.CapitalMarket = @(K_to_L, K, L) K_to_L - K ./ L;
+% Conditions are written as guessed price minus firm-implied price. In
+% stationarity, aggregate current assets and next-period assets coincide.
+GeneralEqmEqns.CapitalMarket = @(r, K, L, theta, delta) ...
+    r - ((1 - theta) .* (K ./ L).^(-theta) - delta);
 
-% beta calibrated to match K/Y = 3.0
-%GeneralEqmEqns.target_beta   = @(K, L, theta) K ./ (K.^(1 - theta) .* L.^theta) - 3.0;
-
-% lambda calibrated to match H = 0.33
-%GeneralEqmEqns.target_lambda = @(H) H - 0.33;
-
-% sigma (CRRA) calibrated to match corr(hours, z) = 0.02
-%GeneralEqmEqns.target_sigma  = @(corr_h_z) corr_h_z - 0.02;
-
-% nu calibrated to match coeff. of variation of hours = 0.22
-%GeneralEqmEqns.target_nu     = @(cv_hours) cv_hours - 0.22;
-
-GEPriceParamNames = {'K_to_L'};
-
-% heteroagentoptions.CustomModelStats = @(V, Policy, StationaryDist, Params, ...
-%     FnsToEvaluate, n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
-%     heteroagentoptions, vfoptions, simoptions) ...
-%     fun_custom_stats(V, Policy, StationaryDist, Params, FnsToEvaluate, ...
-%                      n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
-%                      heteroagentoptions, vfoptions, simoptions);
+% Only the capital-market condition is solved here. The paper's beta, sigma,
+% lambda, and nu are fixed in Params rather than estimated inside this script.
+GEPriceParamNames = {'r'};
 
 %% Solve for the stationary general equilibrium 
 
 if do_GE == 1
     fprintf('Calculating the stationary general equilibrium...\n');
 
-    [p_eqm, ~, GeneralEqmCondn] = HeteroAgentStationaryEqm_Case1( ...
+    [p_eqm, ~, GeneralEqmCondn] = HeteroAgentStationaryEqm_InfHorz( ...
         n_d, n_a, n_z, 0, pi_z, d_grid, a_grid, z_grid, ...
         ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, ...
         DiscountFactorParamNames, [], [], [], ...
@@ -179,23 +176,24 @@ end
 
 %% Recompute at equilibrium prices
 
+Params.K_to_L = fun_KL_from_r(Params.r, Params.theta, Params.delta);
 [Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
 
 fprintf('Calculating value functions, policies, and stationary distribution...\n');
 
 % --- Value function iteration
 tic;
-[~, Policy] = ValueFnIter_Case1(n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
+[~, Policy] = ValueFnIter_InfHorz(n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
     ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 time_vfi = toc;
 
 fprintf('Time VFI (seconds): %.2f\n\n', time_vfi);
 
 % --- Policy functions in levels
-PolicyValues = PolicyInd2Val_Case1(Policy, n_d, n_a, n_z, d_grid, a_grid, vfoptions);
+PolicyValues = PolicyInd2Val_InfHorz(Policy, n_d, n_a, n_z, d_grid, a_grid, vfoptions);
 
 % --- Stationary distribution
-StatDist = StationaryDist_Case1(Policy, n_d, n_a, n_z, pi_z, simoptions);
+StatDist = StationaryDist_InfHorz(Policy, n_d, n_a, n_z, pi_z, simoptions);
 
 % --- Additional functions to evaluate
 FnsToEvaluate.K        = @(d, aprime, a, z) a;    % assets
@@ -203,10 +201,10 @@ FnsToEvaluate.L        = @(d, aprime, a, z) z*d;  % labor in effic units
 FnsToEvaluate.H        = @(d, aprime, a, z) d;    % hours worked
 FnsToEvaluate.earnings = @(d, aprime, a, z, w) w*z*d; % labor earnings
 FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w*z*d + r*a; % income
-FnsToEvaluate.C        = @(d,aprime,a,z,K_to_L,theta,delta) Model_cons(d,aprime,a,z,K_to_L,theta,delta); % consumption
+FnsToEvaluate.C        = @(d, aprime, a, z, r, theta, delta) Model_cons(d, aprime, a, z, r, theta, delta); % consumption
 
 simoptions.nquantiles = 5;
-AllStats = EvalFnOnAgentDist_AllStats_Case1(StatDist, Policy, FnsToEvaluate,...
+AllStats = EvalFnOnAgentDist_AllStats_InfHorz(StatDist, Policy, FnsToEvaluate,...
     Params,[],n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
 
 % Gini coefficients
@@ -231,7 +229,7 @@ pol_d  = gather(reshape(PolicyValues(1, :, :), [n_a, n_z])); % d(a,z)
 pol_ap = gather(reshape(PolicyValues(2, :, :), [n_a, n_z])); % a'(a,z)
 
 % Policy for consumption
-ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_Case1(Policy,FnsToEvaluate,Params,...
+ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_InfHorz(Policy,FnsToEvaluate,Params,...
     [], n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
 pol_c = ValOnGrid.C; % c(a,z)
 
@@ -346,24 +344,23 @@ if do_save == 1
     % LaTeX table preamble
     fprintf(fid, '\\begin{table}[!htbp]\n\\centering\n');
     fprintf(fid, '\\caption{Calibration targets and model parameters}\n');
-    fprintf(fid, '\\begin{tabular}{llll}\n');
+    fprintf(fid, '\\begin{tabular}{lcc}\n');
     fprintf(fid, '\\toprule\n');
-    fprintf(fid, 'Parameter & Description & Target & Value \\\\\n');
+    fprintf(fid, 'Parameter & Target & Value \\\\\n');
     fprintf(fid, '\\midrule\n');
 
-    % Rows
-    fprintf(fid, '$\\sigma$  & Coeff. risk aversion   & corr(h,\\varepsilon)= %.3f & %.3f \\\\\n', ...
-        corr_h_z,      Params.sigma);
-    fprintf(fid, '$\\nu$     & Inverse elast. leisure & cv(h)= %.3f              & %.3f \\\\\n', ...
-        cv.hours,      Params.nu);
-    fprintf(fid, '$\\lambda$ & Weight of leisure      & H= %.3f                  & %.3f \\\\\n', ...
-        agg.HH,        Params.lambda);
-    fprintf(fid, '$\\beta$   & Discount factor        & K/Y= %.3f                & %.3f \\\\\n', ...
-        agg.KK/agg.YY, Params.beta);
-    fprintf(fid, '$\\theta$  & Labor share            & wL/Y= %.3f               & %.3f \\\\\n', ...
-        Params.w*agg.LL/agg.YY, Params.theta);
-    fprintf(fid, '$\\delta$  & Capital depreciation   & I/Y= %.3f                & %.3f \\\\\n', ...
-        agg.II/agg.YY, Params.delta);
+    fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
+        corr_h_z, Params.sigma);
+    fprintf(fid, '$\\nu$     & $cv(h)=%.2f$ & %.3f \\\\\n', ...
+        cv.hours, Params.nu);
+    fprintf(fid, '$\\lambda$ & $H=%.2f$ & %.3f \\\\\n', ...
+        agg.HH, Params.lambda);
+    fprintf(fid, '$\\beta$   & $K/Y=%.2f$ & %.3f \\\\\n', ...
+        agg.KK / agg.YY, Params.beta);
+    fprintf(fid, '$\\theta$  & $wL/Y=%.2f$ & %.3f \\\\\n', ...
+        Params.w * agg.LL / agg.YY, Params.theta);
+    fprintf(fid, '$\\delta$  & $I/Y=%.2f$ & %.3f \\\\\n', ...
+        agg.II / agg.YY, Params.delta);
 
     % Close table
     fprintf(fid, '\\bottomrule\n');
@@ -381,27 +378,31 @@ if do_save == 1
     % LaTeX preamble
     fprintf(fid, '\\begin{table}[!htbp]\n\\centering\n');
     fprintf(fid, '\\caption{Distributional statistics}\n');
-    fprintf(fid, '\\begin{tabular}{llcccccc}\n');
+    fprintf(fid, '\\begin{tabular}{lccccccc}\n');
     fprintf(fid, '\\toprule\n');
     fprintf(fid, 'Variable & $cv$ & Gini & $q_1$ & $q_2$ & $q_3$ & $q_4$ & $q_5$ \\\\\n');
     fprintf(fid, '\\midrule\n');
 
     % Hours
-    fprintf(fid, '\\textbf{Hours} &   &  &   &  &  &  &  \\\\\n');
+    fprintf(fid, '\\multicolumn{8}{l}{Hours} \\\\\n');
     fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.2f & %.2f & %.2f & %.2f & %.2f \\\\\n', ...
         cv.hours, ginic.hours, ave_hours);
+    fprintf(fid, 'Data (CPS) & 0.22 & 0.11 & 0.24 & 0.31 & 0.33 & 0.35 & 0.42 \\\\\n');
 
     % Earnings
     fprintf(fid, '\\addlinespace\n');
-    fprintf(fid, '\\textbf{Earnings} &   &  &   &  &  &  &  \\\\\n');
-    fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.1f & %.1f & %.1f & %.1f & %.1f \\\\\n', ...
+    fprintf(fid, '\\multicolumn{8}{l}{Earnings} \\\\\n');
+    fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.1f\\%% & %.1f\\%% & %.1f\\%% & %.1f\\%% & %.1f\\%% \\\\\n', ...
         cv.earnings, ginic.earnings, 100*shares.earnings);
+    fprintf(fid, 'Data (CPS) & 0.56 & 0.29 & 7.9\\%% & 13.7\\%% & 18.0\\%% & 23.3\\%% & 37.1\\%% \\\\\n');
+    fprintf(fid, 'Data (SCF) & 2.65 & 0.61 & -0.2\\%% & 4.0\\%% & 13.0\\%% & 22.9\\%% & 60.2\\%% \\\\\n');
 
     % Wealth
     fprintf(fid, '\\addlinespace\n');
-    fprintf(fid, '\\textbf{Wealth} &   &  &   &  &  &  &  \\\\\n');
-    fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.1f & %.1f & %.1f & %.1f & %.1f \\\\\n', ...
+    fprintf(fid, '\\multicolumn{8}{l}{Wealth} \\\\\n');
+    fprintf(fid, 'Model $E_0$ & %.2f & %.2f & %.1f\\%% & %.1f\\%% & %.1f\\%% & %.1f\\%% & %.1f\\%% \\\\\n', ...
         cv.wealth, ginic.wealth, 100*shares.wealth);
+    fprintf(fid, 'Data (SCF) & 6.53 & 0.80 & -0.3\\%% & 1.3\\%% & 5.0\\%% & 12.2\\%% & 81.7\\%% \\\\\n');
 
     % Close table
     fprintf(fid, '\\bottomrule\n');
@@ -412,7 +413,9 @@ if do_save == 1
     fprintf(fid, ['\\raggedright\\footnotesize{\\textit{Notes.} $cv$ refers to coefficient of variation. ' ...
                   '$q_1, \\dots, q_5$ refer, for earnings and wealth, to the share held by all people in ' ...
                   'the corresponding quintile with respect to the total. However, for hours it is the ' ...
-                  'average number of hours worked by people in the corresponding quintile.}\\\\\n']);
+                  'average number of hours worked by people in the corresponding quintile. Statistics ' ...
+                  'from SCF correspond to the 1998 wave and are quoted from Budria et al. (2002). ' ...
+                  'Statistics from CPS correspond to the 2002 wave.}\\\\\n']);
     fprintf(fid, '\\normalsize\n');
     fprintf(fid, '\\end{table}\n');
 
@@ -448,13 +451,16 @@ end
 
 % Policy function for hours d(a,z)
 figure;
-plot(a_grid, pol_d(:, 1),            'LineWidth', 2); hold on;
-plot(a_grid, pol_d(:, round(n_z/2)), 'LineWidth', 2);
-plot(a_grid, pol_d(:, n_z),          'LineWidth', 2);
-legend('z_1', 'z_{mid}', 'z_{high}', 'Location', 'best');
-xlabel('Assets');
-ylabel('Hours worked');
-title('Policy function d(a,z)');
+plot(a_grid, pol_d(:, 1), 'k-', 'LineWidth', 1.2); hold on;
+plot(a_grid, pol_d(:, 4), 'k--', 'LineWidth', 1.2);
+plot(a_grid, pol_d(:, 7), 'k:', 'LineWidth', 1.8);
+legend('\epsilon_1', '\epsilon_4', '\epsilon_7', 'Location', 'northeast');
+xlabel('assets');
+ylabel('hours');
+title('Hours');
+xlim([0, 50]);
+ylim([0, 0.60]);
+box on;
 
 if do_save == 1
     print(fullfile(results_dir, 'pol_hours'), '-dpng');

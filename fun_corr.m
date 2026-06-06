@@ -1,7 +1,12 @@
 function corr_xy = fun_corr(x,y,prob)
-% We want to calculate the correlation b/w x and y
-% corr(x,y) = cov(x,u)/(stddev(x)*stddev(y))
-% So first calculate the covariance and the two standard deviations
+%FUN_CORR Weighted correlation between two arrays.
+%
+% Inputs
+%   x,y                    : equally sized arrays to correlate
+%   prob                   : probability mass over the same entries
+%
+% Output
+%   corr_xy                : weighted correlation between x and y
 
 x = x(:);
 y = y(:);

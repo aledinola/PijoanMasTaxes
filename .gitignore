@@ -1,7 +1,10 @@
 # LaTeX auxiliary files
 *.aux
+*.bbl
 *.log
 *.out
+*.bcf
+*.run.xml
 *.synctex.gz
 *.blg
 *.toc
@@ -9,5 +12,12 @@
 *.lot
 *.fls
 *.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+*.xdv
+
 # matlab auxiliary files 
 *.asv
+*.m~
+*.autosave
