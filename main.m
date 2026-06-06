@@ -15,7 +15,7 @@ clear,clc,close all,format long g
 %% Paths and saving options
 
 % Folder where the VFI toolkit files are saved
-mypath = 'C:\Users\aledi\Documents\GitHub\VFIToolkit-matlab';
+mypath = fullfile('..','VFIToolkit-matlab');
 addpath(genpath(mypath))
 
 % Flag for saving output (tables and figures)
@@ -37,14 +37,13 @@ n_d       = 51;  % No. grid points for labor supply
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
 vfoptions.verbose       = 1;
-vfoptions.tolerance     = 1e-9;
-vfoptions.damp          = 0.9;
-vfoptions.maxiter       = 500;
-vfoptions.howards       = 80; 
+vfoptions.tolerance     = 1e-9; % VFI tolerance
+vfoptions.maxiter       = 500;  % VFI max number of iterations
+vfoptions.howards       = 80;   % Number of iterations for Howard 
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 1;
+vfoptions.gridinterplayer = 0;  % 0=a' on coarse grid,1=a' on finer grid
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
@@ -61,7 +60,7 @@ heteroagentoptions.verbose                  = 1;      % 1 = print progress
 heteroagentoptions.toleranceGEprices        = 1e-4;   % default 1e-4
 heteroagentoptions.toleranceGEcondns        = 1e-4;   % default 1e-4
 heteroagentoptions.fminalgo                 = 1;      % 0=fzero, 1=fminsearch, 8=lsqnonlin
-heteroagentoptions.maxiter                  = 1000;
+heteroagentoptions.maxiter                  = 100;
 
 %% Set economic parameters
 
@@ -116,7 +115,9 @@ if do_pijoan == 1
 else
     disp('AR(1) discretization of z with n_z points');
     n_z = 7;
-    [pi_z, z_grid_log] = markovapprox(Params.rho_z, Params.sig_z, 0.0, 3.0, n_z, 0);
+    Tauchen_q = 3.0;
+    %[pi_z, z_grid_log] = markovapprox(Params.rho_z, Params.sig_z, 0.0, 3.0, n_z, 0);
+    [z_grid_log,pi_z] = discretizeAR1_Tauchen(0.0,Params.rho_z,Params.sig_z,n_z,Tauchen_q);
     z_grid              = exp(z_grid_log);
 end
 
