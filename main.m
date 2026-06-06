@@ -1,7 +1,4 @@
 %% Pijoan-Mas (2006)
-% TODO: For this set of parameters, check two methods for VFI with interp:
-% ValueFnIter_Refine_postGI_raw (default): ALL GOOD
-% ValueFnIter_postGI_sparse_raw: DOES NOT CONVERGE
 % This program replicates most of the quantitative results of
 % Josep Pijoan-Mas, 2006. "Precautionary Savings or Working Longer Hours?"
 % Specifically, it reproduces Table 1, Table 2 and Figure 1.
@@ -130,38 +127,36 @@ ReturnFn = @(d, aprime, a, z, K_to_L, sigma, lambda, nu, theta, delta) ...
     Model_ReturnFn(d, aprime, a, z, K_to_L, sigma, lambda, nu, theta, delta);
 
 % --- Functions to evaluate on the distribution
-FnsToEvaluate.K = @(d, aprime, a, z) a;    % Assets / capital
-FnsToEvaluate.L = @(d, aprime, a, z) z .* d; % Labor in efficiency units
-FnsToEvaluate.H = @(d, aprime, a, z) d;    % Hours of work
+FnsToEvaluate.K = @(d, aprime, a, z) a;   % Assets / capital
+FnsToEvaluate.L = @(d, aprime, a, z) z*d; % Labor in efficiency units
+FnsToEvaluate.H = @(d, aprime, a, z) d;   % Hours of work
 
 % --- General equilibrium conditions
 % Conditions are written as LHS - RHS = 0 at equilibrium.
 GeneralEqmEqns.CapitalMarket = @(K_to_L, K, L) K_to_L - K ./ L;
 
 % beta calibrated to match K/Y = 3.0
-GeneralEqmEqns.target_beta   = @(K, L, theta) K ./ (K.^(1 - theta) .* L.^theta) - 3.0;
+%GeneralEqmEqns.target_beta   = @(K, L, theta) K ./ (K.^(1 - theta) .* L.^theta) - 3.0;
 
 % lambda calibrated to match H = 0.33
-GeneralEqmEqns.target_lambda = @(H) H - 0.33;
+%GeneralEqmEqns.target_lambda = @(H) H - 0.33;
 
 % sigma (CRRA) calibrated to match corr(hours, z) = 0.02
-GeneralEqmEqns.target_sigma  = @(corr_h_z) corr_h_z - 0.02;
+%GeneralEqmEqns.target_sigma  = @(corr_h_z) corr_h_z - 0.02;
 
 % nu calibrated to match coeff. of variation of hours = 0.22
-GeneralEqmEqns.target_nu     = @(cv_hours) cv_hours - 0.22;
+%GeneralEqmEqns.target_nu     = @(cv_hours) cv_hours - 0.22;
 
-GEPriceParamNames                        = {'K_to_L', 'beta', 'lambda', 'sigma', 'nu'};
-heteroagentoptions.constrain0to1         = {'beta'};
-heteroagentoptions.multiGEweights        = [1, 1, 1, 1, 1];
+GEPriceParamNames = {'K_to_L'};
 
-heteroagentoptions.CustomModelStats = @(V, Policy, StationaryDist, Params, ...
-    FnsToEvaluate, n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
-    heteroagentoptions, vfoptions, simoptions) ...
-    fun_custom_stats(V, Policy, StationaryDist, Params, FnsToEvaluate, ...
-                     n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
-                     heteroagentoptions, vfoptions, simoptions);
+% heteroagentoptions.CustomModelStats = @(V, Policy, StationaryDist, Params, ...
+%     FnsToEvaluate, n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
+%     heteroagentoptions, vfoptions, simoptions) ...
+%     fun_custom_stats(V, Policy, StationaryDist, Params, FnsToEvaluate, ...
+%                      n_d, n_a, n_z, d_grid, a_grid, z_gridvals, pi_z, ...
+%                      heteroagentoptions, vfoptions, simoptions);
 
-%% Solve for the stationary general equilibrium (optional)
+%% Solve for the stationary general equilibrium 
 
 if do_GE == 1
     fprintf('Calculating the stationary general equilibrium...\n');
@@ -190,8 +185,7 @@ fprintf('Calculating value functions, policies, and stationary distribution...\n
 
 % --- Value function iteration
 tic;
-[~, Policy] = ValueFnIter_Case1( ...
-    n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
+[~, Policy] = ValueFnIter_Case1(n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
     ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 time_vfi = toc;
 
@@ -212,9 +206,8 @@ FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w*z*d + r*a; % income
 FnsToEvaluate.C        = @(d,aprime,a,z,K_to_L,theta,delta) Model_cons(d,aprime,a,z,K_to_L,theta,delta); % consumption
 
 simoptions.nquantiles = 5;
-AllStats = EvalFnOnAgentDist_AllStats_Case1( ...
-    StatDist, Policy, FnsToEvaluate, Params, [], ...
-    n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
+AllStats = EvalFnOnAgentDist_AllStats_Case1(StatDist, Policy, FnsToEvaluate,...
+    Params,[],n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
 
 % Gini coefficients
 ginic.wealth   = AllStats.K.Gini;
@@ -238,8 +231,9 @@ pol_d  = gather(reshape(PolicyValues(1, :, :), [n_a, n_z])); % d(a,z)
 pol_ap = gather(reshape(PolicyValues(2, :, :), [n_a, n_z])); % a'(a,z)
 
 % Policy for consumption
-ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_Case1(Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
-pol_c = ValOnGrid.C;
+ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_Case1(Policy,FnsToEvaluate,Params,...
+    [], n_d, n_a, n_z, d_grid, a_grid, z_grid, simoptions);
+pol_c = ValOnGrid.C; % c(a,z)
 
 if ~isequal(size(pol_c),[n_a,n_z])
     error('Policy fir consumption computed by ValuesOnGrid is not correct')
