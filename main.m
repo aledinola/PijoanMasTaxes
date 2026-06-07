@@ -25,7 +25,7 @@ end
 
 %% Set computational options
 
-do_GE     = 1;   % 0=solve at fixed K/L, 1=solve GE over r
+do_GE     = 0;   % 0=solve at fixed K/L, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
@@ -33,14 +33,14 @@ n_d       = 51;  % No. grid points for labor supply
 % --- Value functions options
 vfoptions=struct(); 
 vfoptions.lowmemory     = 0;
-vfoptions.verbose       = 1;
+vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-9; % VFI tolerance
 vfoptions.maxiter       = 500;  % VFI max number of iterations
 vfoptions.howards       = 80;   % Number of iterations for Howard 
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 0;  % 0=a' on coarse grid,1=a' on finer grid
+vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid,1=a' on finer grid
 vfoptions.ngridinterp     = 15;
 %vfoptions.divideandconquer = 0;
 
@@ -72,15 +72,15 @@ Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
 % Paper targets used to report calibration and data comparisons.
-Targets.corr_h_z = 0.02;
+%Targets.corr_h_z = 0.02;
 Targets.cv_h     = 0.22;
 Targets.H        = 0.33;
 Targets.K_to_Y   = 3.00;
 Targets.wL_to_Y  = 0.64;
 Targets.I_to_Y   = 0.25;
 
-% Fixed-K/L runs use the paper target K/Y=3. In GE mode this is the
-% initial price guess because K/Y=(K/L)^theta with Cobb-Douglas production.
+% Fixed-price runs start from the paper target K/Y=3. In GE mode the toolkit
+% solves over r, so K/Y=(K/L)^theta is used only to construct the initial r.
 Params.K_to_L = Targets.K_to_Y^(1 / Params.theta);
 [Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
 
@@ -176,8 +176,7 @@ end
 
 %% Recompute at equilibrium prices
 
-Params.K_to_L = fun_KL_from_r(Params.r, Params.theta, Params.delta);
-[Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
+[Params.w, Params.K_to_L] = fun_w_from_r(Params.r, Params.theta, Params.delta);
 
 fprintf('Calculating value functions, policies, and stationary distribution...\n');
 
@@ -240,32 +239,33 @@ end
 % Average hours by quintile
 ave_hours = AllStats.H.QuantileMeans;
 
-%% Correlation statistics: can use either user-written function fun_corr or 
-% toolkit function EvalFnOnAgentDist_CrossSectionCorr_InfHorz
-% Pijoan-Mas computes corr(h,eps) and corr(a,eps) 
-% Correlation between hours and productivity shocks
-% Correlation between wealth and productivity shocks
-
-% --- Toolkit command for correlation
-FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
-FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
-FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
-Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
-
-corr_h_z = Corr.hours.CorrelationWith.productivity;
-corr_a_z = Corr.wealth.CorrelationWith.productivity;
-
-% --- My own function for correlation
-z_mat     = repmat(z_grid', n_a, 1);
-corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
-corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
-
-if abs(corr_h_z-corr_h_z2)>1e-6
-    warning('corr_h_z')
-end
-if abs(corr_a_z-corr_a_z2)>1e-6
-    warning('corr_a_z')
-end
+%% Correlation statistics
+% Correlation calculations are temporarily disabled while debugging
+% vfoptions.gridinterplayer/simoptions.gridinterplayer behavior. This avoids a
+% toolkit correlation error and lets the script expose any nonsensical economic
+% aggregates produced upstream by VFI, policy conversion, distribution, or
+% moment evaluation.
+%
+% % --- Toolkit command for correlation
+% FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
+% FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
+% FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
+% Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
+%
+% corr_h_z = Corr.hours.CorrelationWith.productivity;
+% corr_a_z = Corr.wealth.CorrelationWith.productivity;
+%
+% % --- User-written function for correlation
+% z_mat     = repmat(z_grid', n_a, 1);
+% corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
+% corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
+%
+% if abs(corr_h_z-corr_h_z2)>1e-6
+%     warning('corr_h_z')
+% end
+% if abs(corr_a_z-corr_a_z2)>1e-6
+%     warning('corr_a_z')
+% end
 
 %% Aggregate moments and dispersion
 
@@ -298,7 +298,7 @@ fprintf('r                                       : %f \n', Params.r);
 fprintf('w                                       : %f \n', Params.w);
 disp('------------------------------------');
 disp('MOMENTS');
-fprintf('Corr(h,z)                               : %f \n', corr_h_z);
+%fprintf('Corr(h,z)                               : %f \n', corr_h_z);
 fprintf('CV(h)                                   : %f \n', cv.hours);
 fprintf('Hours                                   : %f \n', agg.HH);
 fprintf('K/Y                                     : %f \n', agg.KK / agg.YY);
@@ -331,9 +331,9 @@ fprintf('q3 wealth                               : %f \n', shares.wealth(3));
 fprintf('q4 wealth                               : %f \n', shares.wealth(4));
 fprintf('q5 wealth                               : %f \n', shares.wealth(5));
 disp('------------------------------------');
-disp('SHARES WEALTH');
-fprintf('Corr(h,z) hours and product             : %f \n', corr_h_z);
-fprintf('Corr(a,z) wealth and product            : %f \n', corr_a_z);
+%disp('CORRELATIONS');
+%fprintf('Corr(h,z) hours and product             : %f \n', corr_h_z);
+%fprintf('Corr(a,z) wealth and product            : %f \n', corr_a_z);
 
 
 %% Replicate Table 1 of Pijoan-Mas (2006)  (LaTeX)
@@ -349,8 +349,8 @@ if do_save == 1
     fprintf(fid, 'Parameter & Target & Value \\\\\n');
     fprintf(fid, '\\midrule\n');
 
-    fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
-        corr_h_z, Params.sigma);
+    %fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
+    %    corr_h_z, Params.sigma);
     fprintf(fid, '$\\nu$     & $cv(h)=%.2f$ & %.3f \\\\\n', ...
         cv.hours, Params.nu);
     fprintf(fid, '$\\lambda$ & $H=%.2f$ & %.3f \\\\\n', ...

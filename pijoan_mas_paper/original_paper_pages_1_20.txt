@@ -1,0 +1,982 @@
+                               Review of Economic Dynamics 9 (2006) 326–352
+                                                                                         www.elsevier.com/locate/red
+
+
+
+
+        Precautionary savings or working longer hours?
+                                          Josep Pijoan-Mas a,b
+                                 a CEMFI, Casado del Alisal 5, 28014 Madrid, Spain
+                                b CEPR, 90-98 Goswell Road, London EC1V 7RR, UK
+
+                                Received 11 October 2003; revised 16 November 2005
+                                         Available online 22 December 2005
+
+
+
+
+Abstract
+   This paper quantifies the macroeconomic implications of the lack of insurance against idiosyncratic labor
+market risk. I show that in a model economy calibrated to observed individual level data, households make
+ample use of work effort as a consumption smoothing mechanism. As a consequence, aggregate consump-
+tion is 0.6% lower, work effort is 18% higher and labor productivity is 12% lower than they would be in
+a complete markets setting. Not surprisingly, the welfare benefits of moving towards complete markets are
+very large. Accounting for the whole transition to the new complete markets steady state I find the welfare
+costs of market incompleteness above 16% of individual lifetime consumption.
+ 2005 Elsevier Inc. All rights reserved.
+
+JEL classification: E21; D31; J22; C68
+
+Keywords: Incomplete markets; Labor supply; Precautionary savings
+
+
+
+1. Introduction
+
+    Empirical evidence reveals a very low cross-sectional correlation between hours of work and
+wages. If individuals perceive wage differences to be permanent, then the lack of correlation be-
+tween hours and wages just tells us that preferences are such that the substitution and the income
+effect compensate each other. However, several studies show that a big fraction of the cross-
+sectional dispersion in wages is due to non-permanent stochastic factors.1 According to this,
+even if the income and substitution effects compensate each other, we would expect individuals
+to take advantage of better labor market opportunities and work more when more productive and
+
+
+   E-mail address: pijoan@cemfi.es.
+ 1 For instance, Card (1991), Flodén and Lindé (2001), French (2003) or Heathcote et al. (2004).
+
+
+1094-2025/$ – see front matter  2005 Elsevier Inc. All rights reserved.
+doi:10.1016/j.red.2005.11.002
+                      J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352              327
+
+
+enjoy leisure when less. This substitution of work effort across periods is limited by two different
+factors. First, the available financial technology to transfer resources from high wage to low wage
+periods, and second, individual preferences for both smooth consumption and smooth leisure. In
+particular, if there existed assets whose payment was contingent on the wage perceived by in-
+dividuals, then the substitution of work effort across periods would depend only on individuals
+preferences.
+    The purpose of this paper is to assess quantitatively the macroeconomic implications of the
+lack of markets to insure against idiosyncratic labor market risk. I use a standard dynamic gen-
+eral equilibrium model with heterogeneous agents where households take consumption/saving
+and labor/leisure decisions. Key parameters as the intertemporal elasticities of substitution for
+consumption and leisure are inferred from household level data. Then, I quantify the effects of
+market incompleteness on the aggregate amount of hours worked, labor productivity, aggregate
+capital, aggregate output, aggregate consumption and individual welfare.
+    I find that the quantitative effects of market incompleteness are very big. For an economy
+calibrated to both aggregate and individual level data from the US, the lack of a financial tech-
+nology to insure against labor market risk changes dramatically the labor supply of households.
+Within the model, the lack of cross-sectional correlation between hours and wages is interpreted
+as households using labor supply as a mechanism to keep a smooth pattern of consumption.
+This is reflected in the labor productivity. In the calibrated incomplete markets economy, labor
+productivity is 19.3% lower than in the complete markets economy when holding capital fixed
+and 11.5% lower when allowing capital to adjust. In addition, work effort is much higher in the
+incomplete markets economy: the lack of state contingent bonds is responsible for 18% of the
+observed work effort.
+    The reason for these results is as follows. Under complete markets, households substitute
+leisure across different states, working long hours when their market productivity is high and
+working few or none hours when their market productivity is low. State contingent assets allow
+consumers to transfer resources between states and keep the marginal utility of consumption
+equal across states. In contrast, in the incomplete markets world households are not so willing
+to substitute labor across states precisely because the ability to transfer resources between states
+is limited. In the steady state equilibrium, a large fraction of low productivity workers are also
+asset-poor. This type of households will supply many hours in spite of not being very productive
+because their marginal utility of consumption is very high. At the same time a large fraction of
+high productivity workers are asset-rich. This type of households will not supply many hours of
+work because their marginal utility of consumption is very low. Ultimately, the total amount of
+labor measured in efficiency units is low, the work effort high and the labor productivity low.
+    Notice therefore that the mechanics driving the quantitative results of the paper is that house-
+holds make ample use of their labor supply as a self-insurance mechanism in absence of state
+contingent assets. Do they rely more in precautionary savings or in working long hours? For the
+benchmark economy I find that precautionary savings are equal to 18.6% of aggregate capital
+whereas the share of hours worked in the incomplete markets economy in excess of the amount
+of hours worked in the complete markets economy is 15.2%. With a somewhat more persistent
+wage process these figures become 3.7 and 20.7%. Therefore, a salient quantitative result of this
+paper is that households seem to be using their work effort as a self-insurance mechanism at least
+as much as they do with savings if not more, the exact measurement depending on the persistence
+of the non-deterministic component of the wage process. This is consistent with empirical evi-
+dence. For instance, Parker et al. (2005), using data from self-employed individuals in the PSID,
+find increases in hours of work as a response to increases in uncertainty.
+328                     J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+    Last, but not least, the welfare benefits associated to the introduction of markets to insure
+against idiosyncratic risk are huge and vary substantially among households. The average over
+the whole population of the percentage increase in lifetime consumption required by a house-
+hold to be indifferent between the incomplete and the complete markets economy is 16%. When
+explicitly accounting for the transition, this figure rises to 16.5%. The reason is that the tran-
+sition is quite a pleasant affair because it allows households to eat their precautionary savings.
+The literature on market completeness so far has emphasized the welfare benefits of eliminat-
+ing fluctuations in consumption.2 The welfare gains due to the increased labor productivity have
+been somehow overlooked. I find that labor productivity contributes more than 40% to the wel-
+fare increase. In a very recent and complementary work, Heathcote et al. (2005) also find that
+the increase in labor productivity accounts for a big share of the welfare benefits associated to
+complete markets.
+    There is relatively little work on the interaction of savings and work effort as self-insurance
+mechanisms. In a two period model, Flodén (2005) shows theoretically the importance of the
+joint determination of labor supply and savings when future wages are uncertain. In a different
+type of work, Low (2005) examines the life-cycle consumption and labor allocations in a par-
+tial equilibrium context and finds that for a given set of parameters, a model with endogenous
+labor supply generates higher savings than an exogenous labor model. However, he does not
+directly measure precautionary savings. Finally, in a general equilibrium model Marcet et al.
+(2003) argue that with the explicit consideration of endogenous labor supply we may find neg-
+ative precautionary savings. However, contrary to the results presented here, in their model this
+goes necessarily through a lower amount of hours worked in the incomplete markets economy.
+This is an important difference and I will come back to it.
+    The reminder of the paper is organized as follows. Section 2 describes the theoretical set-
+up. Section 3 explains how the model economy is calibrated to data. Then, the model economy
+is simulated in and the results presented and discussed in Section 4. Section 5 performs some
+robustness checks of the results. Finally, Section 6 concludes.
+
+2. The model economies
+
+  The economies analyzed in this paper are growth economies with production, populated by a
+measure one of households that live forever. In this section I will only look at steady states.
+
+2.1. Preferences
+
+   Households derive utility from consumption and leisure. Current consumption is denoted by c
+and leisure by l. Future utilities are discounted at therate β ∈ (0, 1). I write the per period utility
+as u(c, l), and total expected utility at time τ as Eτ ∞  t=τ β
+                                                                t−τ u(c , l ).
+                                                                       t t
+
+2.2. Production technology
+
+   Each period households receive a shock to their efficiency units of labor ε ∈ Υ ≡ {ε1 , . . . , εnε }.
+This shock is Markov with transition matrix Γ , with Γεε stating P r(εt+1 = ε  | εt = ε).
+   Aggregate output Y is produced according to an aggregate neoclassical production function
+F (K, L) that takes as inputs capital K and efficient units of labor L. The aggregate labor input
+
+ 2 See for example Kubler and Schmedders (2001).
+                                J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                            329
+
+
+comes from aggregating over all agents’ efficiency units of labor worked. Aggregate capital
+results from aggregation of all assets. Capital depreciates at an exogenous rate δ ∈ (0, 1).
+
+2.3. Market arrangements
+
+    I distinguish between two types of market arrangements. The benchmark economy is an in-
+complete markets economy. By incomplete markets I mean that there are no state contingent
+markets for the household specific shock ε. Households hold assets a ∈ [a, ∞) that pay interest
+at rate r. I assume that households are restricted by a lower bound on their assets holdings a.3
+    In the complete markets economy households can trade Arrow securities contingent on the
+realization of their own idiosyncratic shock. I denote by b (ε  ) the amount of units of the con-
+sumption good to be paid to the security holder at the beginning of next period if next period
+idiosyncratic shock is ε  . I denote by q(ε, ε  ) the price that a household of type ε has to pay in
+the current period for such a security. A way to decentralize the economy with complete mar-
+kets is by assuming there is an insurance sector with free entry that operates a costless monitoring
+technology such that the realizations of the efficiency units endowments are perfectly observable.
+
+2.4. Incomplete markets economies
+
+   The individual state variables are the shock realization ε and the stock of assets a.4 The
+problem that the household solves is:
+                                                     
+      v(ε, a) = max u(c, l) + β      Γεε v(ε  , a  )                                    (1)
+                    c,l,a 
+                                             ε
+                      
+       s.t.:   c + a = wε(1 − l) + (1 + r)a,                                                                            (2)
+                                                     
+               c ⩾ 0,         1 ⩾ l ⩾ 0 and a ⩾ a,
+where r and w are the return on assets and the rental rate per efficiency units of labor. Under
+certain conditions problems of this type have a solution that we denote a  = g a (ε, a), c = g c (ε, a)
+and l = g l (ε, a) with an upper bound on asset holdings, a such that a ⩾ g a (ε, a) ⩾ a for all
+ε ∈ Υ and all a ∈ A ≡ [a, a].5 Hereafter I will also use the more compact notation s ≡ {ε, a} and
+S ≡ Υ × A.
+   It is possible to construct a Markov process for the individual state variables, from the Markov
+process on the shocks and from the decision rules of the agents.6 Let B be the σ -algebra gener-
+ated in S by, say, its open intervals. A probability measure µ over B exhaustively describes the
+economy by stating how many households are of each type. Let Q(s, B) denote the probability
+that a type s = {ε, a} has of becoming of a type in B ⊂ B. Given the objects defined so far, we
+can express Q as:
+                    
+       Q(s, B) =        Γεε Ig(ε,a)∈Ba ,
+                      ε  ∈Bε
+
+
+  3 This lower bound may arise endogenously as the quantity that ensures that the household is capable of repaying
+its debt in all states of the world or we can just set it exogenously as a borrowing constraint. See Huggett (1993) and
+Aiyagari (1994) for details.
+  4 Since there is no aggregate uncertainty and since we only look at steady states, there are no aggregate state variables.
+  5 See Huggett (1993) and Marcet et al. (2003) for details.
+  6 See Huggett (1993) or Hopenhayn and Prescott (1992) for details.
+330                            J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+where I is an indicator function that takes value 1 if its argument is true and 0 otherwise, Bε is
+the projection of B in Υ and Ba is the projection of B in A. The transition function Q describes
+the evolution of the economy by generating a probability measure for next period µ given a
+probability measure µ today. The exact way in which this occurs is
+                
+      µ (B) = Q(s, B) dµ.                                                                     (3)
+                 S
+
+Definition 1. A steady state equilibrium for the incomplete markets economy is a set of functions
+{v, g a , g c , g l }, a measure of households µ, and a pair of prices {w, r} such that:
+
+(1) given a pair of prices {w, r}, the functions {v, g a , g c , g l } solve the households’ decision
+    problem;
+(2) prices are given by marginal productivities, r = FK (K/L) − δ and        w = FL (K/L);
+(3) factor inputs are obtained aggregating over households, L = ε(1 − g l ) dµ and K =
+       g a dµ;                                         
+(4) the measure of households is stationary, µ(B) = S Q(s, B) dµ and
+(5) by virtue of the Walras law, the aggregate resource constraint of the economy is automatically
+    satisfied, C + K  = F (K, L) + (1 − δ)K.
+
+2.5. Complete markets economies
+
+   Under complete markets, the individual level state variables are the realization of the idio-
+syncratic shock ε and the income obtained from the corresponding Arrow security b(ε). The
+problem that the household solves is:
+                                                             
+                                                           
+      v ε, b(ε) = max u(c, l) + β       Γεε v ε  , b (ε  )                               (4)
+                          c,l,b (ε  )
+                                                     ε
+                   
+      s.t.:   c+           q(ε, ε  )b (ε  ) = wε(1 − l) + b(ε),                               (5)
+                     ε
+              c⩾0          and 1 ⩾ l ⩾ 0.
+The solution to this problem is given by the policy functions b (ε  ) = g b (ε, b(ε), ε  ), c =
+g c (ε, b(ε)) and l = g l (ε, b(ε)).
+     For a household of type {ε, b(ε)} we have an Euler equation for each state contingent bond
+b (ε  ):
+                       Γεε
+      uc (c, l) = β              uc (c , l  )   ∀ε  ∈ Υ
+                      q(ε, ε  )
+where l is given by the intratemporal first order condition:
+      uc (c, l)wε = ul (c, l).                                                                   (6)
+Imposing equilibrium in the insurance market q(ε, ε  ) = (1 + r)−1 Γεε the Euler equations can
+be rewritten as:
+      uc (c, l) = β(1 + r) uc (c , l  )         ∀ε  ∈ Υ,
+                                    J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                      331
+
+
+which tells us that households will choose their purchases of state contingent bonds such that
+the next period marginal utilities of consumption are equalized across states.7 Therefore, for a
+steady state equilibrium with a balanced growth path to exist we will require β(1 + r) = 1.8 This
+condition further simplifies the Euler equations for the state contingent bonds:
+       uc (c, l) = uc (c , l  )         ∀ε  ∈ Υ.
+This is the standard complete markets relationship. Households choose b (ε  ) such that the mar-
+ginal utility of consumption is equalized across different states of the world and different points
+in time.
+
+Definition 2. A steady state equilibrium for the complete markets economy is a set of functions
+{v, g b , g c , g l }, a measure of households µ, a pair of prices {w, r} and a pricing function q(ε, ε  )
+such that:
+
+(1) given a pair of prices {w, r} and the pricing function q(ε, ε  ), the functions {v, g b , g c , g l }
+    solve the households’ decision problem;
+(2) prices are given by marginal productivities, r = FK (K/L) − δ and      w = FlL (K/L);
+(3) factor inputs
+                    are   obtained    aggregating   over households, L =  ε(1 − g (ε, b(ε))) dµ and
+    K=             q(ε, ε  )g b (ε, b(ε), ε  ) dµ;
+                ε
+(4) the pricing function q(ε, ε  ) satisfies the no-arbitrage condition in the insurance industry,
+    q(ε, ε  ) = (1 + r)−1 Γεε ;
+(5) the steady state condition β(1 + r) = 1 holds; and
+(6) by virtue of the Walras law, the aggregate resource constraint of the economy is automatically
+    satisfied, C + K  = F (K, L) + (1 − δ)K.
+
+    Unlike the incomplete market economy, the steady state equilibrium is not unique. There is
+a unique set of prices r, w and q(ε, ε  ) and capital labor ratio K/L pinned down by the equi-
+librium conditions (2), (4) and (5). Given a unique set of prices, condition (1) implies a unique
+set of functions {v, g b , g c , g l } and therefore the optimal individual behavior is also uniquely
+determined. However, for general types of preferences, condition (3) implies that different dis-
+tributions of households µ generate different pairs of aggregate capital K and aggregate labor L
+consistent with the unique capital to labor ratio.9 Indeed, there are potentially infinite different
+distributions µ compatible with the unique equilibrium capital to labor ratio.10 These different
+distributions will generate different levels of aggregate capital and labor and therefore of hours
+worked, output and aggregate consumption. Therefore, contrary to an economy without valued
+
+ 7 Or the consumption level itself if consumption and leisure are separable in the utility function.
+ 8 Notice that if β(1 + r) > 1, we would need
+
+       uc (c, l) > uc (c , l  )    ∀ε ∈ Υ
+
+which asks for consumption (and therefore assets) to grow forever. If β(1 + r) < 1, the opposite would be true.
+ 9 In particular, with valued leisure and heterogeneous and time-changing endowments of labor productivity, Gorman
+(1953) aggregation result does not hold: homotheticity of preferences is not a sufficient condition for aggregation. See
+Maliar and Maliar (2003) for details.
+10 The lack of uniqueness is broken by the fact that the steady state condition βR = 1 implies that in equilibrium
+individual assets may lay at any point in the unbounded set [a, ∞) and therefore the state space described by the set S is
+not compact. Therefore, Theorem 2 in Hopenhayn and Prescott (1992) does not hold.
+332                        J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+leisure, we cannot characterize the solution to the complete markets economy by use of a rep-
+resentative agent. When solving for the complete markets economy we need to make explicit
+which equilibrium we choose.
+
+3. Calibration
+
+   The length of the model period is set equal to one year. The calibration strategy I pursue is
+the following. Given an exogenous process for the efficiency endowment ε, I choose the model
+parameters such that in the steady state equilibrium the incomplete markets economy matches
+some characteristics of both aggregate and individual level data. This implies solving for the
+equilibrium as many times as needed until the statistics from data are matched.11 In a sense, this
+calibration strategy can be seen as an exactly identified simulated method of moments estimation.
+Then, given these parameters the complete markets economies are solved. In the remaining of
+this section I give more details about this process.
+
+3.1. The process for individual wages
+
+   The process for market productivity shocks ε is determined by an nε ×1 vector of endowments
+Υ and an nε × nε transition matrix Γ . The first step for the calibration is to give values to the
+parameters of this process by looking at data on wages.
+   The model is set such that there is no fixed heterogeneity. In this model economy all house-
+holds will be at some point at the top and at some other point at the bottom of the wage
+distribution. If we mapped the actual distribution of wages into the model, we would be im-
+posing for instance that a computer engineer may end up being as productive as an assembly line
+worker (and vice versa). The large variance of earnings observed in data does not seem to re-
+flect actual uncertainty faced by people. Therefore, instead of calibrating the model productivity
+process to the overall dispersion of the observed wage distribution I will take as reference the
+wage distribution net of fixed heterogeneity.
+   There are several articles estimating processes for wages. Let us call ωi,t the log of the real
+hourly wage at t earned by individual i. A typical set-up is as follows:
+                                                            
+       ωi,t = γ xi,t + αi + zi,t + υi,t with υi,t ∼ N 0, συ2
+where xi,t is a vector of observable characteristics, αi reflects an individual i unobserved fixed
+component, υi,t may reflect measurement error and zi,t is an stochastic time changing individual
+specific component that evolves as follows:
+                                                
+      zi,t = ρzi,t−1 + ηi,t with ηi,t ∼ N 0, ση2 .
+This idiosyncratic component z is the one that corresponds to the (log of the) model productivity
+term ε.
+   Estimates of this idiosyncratic component vary. Using PSID data, Flodén and Lindé (2001)
+estimate ρ = 0.92 and ση = 0.21. Also using PSID data French (2003) finds a somewhat more
+persistent process with ρ = 0.977 and ση = 0.12. French estimate implies also a slightly more
+
+11 Other recent articles that follow a similar calibration strategy in a similar context are Castañeda et al. (2003) and
+Heathcote et al. (2004).
+                           J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                             333
+
+
+volatile idiosyncratic component for wages, with σz = 0.56, whereas Flodén and Lindé parame-
+ters imply σz = 0.54.12
+   I will parameterize the process for ε by discretizing each of these two estimations into a seven-
+state Markov chain following the methodology described by Tauchen (1986). I will call E0 the
+economy that arises from the discretization of the process estimated by Flodén and Lindé (2001).
+In Section 5.3, I will also provide results for the economy that arises from the discretization of
+the more persistent process estimated by French (2003).
+
+3.2. The calibration in equilibrium
+
+   The production function is the standard Cobb–Douglas, which is consistent with the non-
+trended factor shares observed in US data for the post-war years:
+       F (K, L) = K 1−θ Lθ .
+The chosen utility function is:
+                  c1−σ − 1       l 1−ν − 1
+       u(c, l) =            +λ             .
+                    1−σ             1−ν
+It gives enough parameters to have distinct intertemporal elasticities of substitution for consump-
+tion and leisure which let us match observed individual behavior.13 With this utility function, the
+intertemporal elasticity of substitution of consumption is given by 1/σ , the intertemporal elas-
+ticity of substitution of leisure by 1/ν and the intertemporal elasticity of substitution of labor by
+    l
+ν(1−l) .
+     There are 6 parameters we want to pin down: the preference parameters β, σ , ν, λ and the
+technology parameters θ and δ.14 I will calibrate these values so that in equilibrium the incom-
+plete markets economy matches some statistics from data, taking three targets from aggregate
+data and three targets from household survey data.
+     The three targets from aggregate data are quite standard choices. I will use the capital to
+output ratio, the ratio of investment to output and the labor share. These statistics should mainly
+pin down the time discount factor β, the depreciation rate δ and the labor share parameter θ .
+I pick a value of 3.0 for the capital labor ratio, a value of 0.25 for the investment output ratio
+and a labor share of 0.64. They are all fairly common choices for general equilibrium model
+economies.
+     I use the Current Population Survey (CPS) for 2002 to compute the three targets from cross-
+sectional household survey data as follows.15 First, I choose the average number of hours worked
+in the sample which is roughly 1/3 of available time. Second, I use the cross-sectional correlation
+of wages with hours. Third, I target the cross-sectional volatility of hours worked. These three
+
+12 These are not the only studies estimating a process for the idiosyncratic and stochastic component of wages by use of
+PSID data. Earlier work by Card (1991) provides a less persistent process with ρ = 0.89. Heathcote et al. (2004) obtain
+ρ = 0.94.
+13 Notice however that σ = 1 is inconsistent with balanced growth path in a representative agent economy with positive
+growth.
+14 The lower level on asset holdings a is set equal to the natural borrowing limit. Since in this model there are no
+transfers and labor income depends on hours supplied the natural borrowing limit turns out to be zero. Less stringent
+borrowing limits are explored in Section 5.1.
+15 I actually use the 2002 NBER Merged Outgoing Rotation Groups sub-sample of the CPS data set, which contains the
+4th and 8th month interviews of every household.
+334                          J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+                         Table 1
+                         Calibration targets and model parameters
+                         Parameter                    Target                                Value
+                         σ                            corr(h, ε) = 0.02                     1.458
+                         ν                            cv(h) = 0.22                          2.833
+                         λ                            H = 0.33                              0.856
+                         β                            K/Y = 3.00                            0.945
+                         θ                            wL/Y = 0.64                           0.640
+                         δ                            I /Y = 0.25                           0.083
+
+
+statistics will pin down the three parameters of the utility function. In doing so I follow Heathcote
+et al. (2004).16 To accord with the model lack of deterministic heterogeneity, I clean hours and
+wages from fixed heterogeneity. I regress out education, age, sex and race from wages and hours
+and compute (a) the correlation of the residual of hours with the residual of wages and (2) the
+coefficient of variation of the residual of hours. The correlation turns out to be a very small
+0.02.17 The coefficient of variation of hours is 0.22.
+    Table 1 contains the parameter values consistent with a steady state equilibrium displaying
+these six properties from data.18 We obtain σ = 1.458 and ν = 2.833. The former value implies
+an intertemporal elasticity of substitution for consumption of 0.69, a value in line with many
+macroeconomic papers. The latter value implies an intertemporal elasticity of substitution for
+leisure equal to 0.35 and for labor equal to 0.72 (when evaluated at its average). Empirical esti-
+mates of the intertemporal elasticity of labor using micro data on male household heads tend to
+be lower than this number. However, according to Domeij and Flodén (2005) estimates that do
+not take into account borrowing constraints may be seriously downward biased. These authors,
+when controlling for borrowing constraints, estimate an elasticity of labor around 0.59.19
+    As an assessment of this model economy, in Table 2, I display some distributional statistics
+and compare them to data. In the first panel, I report the statistics for hours. The coefficient of
+variation of hours has been calibrated so the model and data coincide. The rest of the distribution
+has not. We see that the model generates an average amount of hours worked at each quintile of
+the distribution of hours very close to data. The second panel reports some statistics for the dis-
+tribution of labor earnings. I use data from two different sources: the CPS, computed by myself,
+and the Survey of Consumer Finances (SCF), quoted from Budría et al. (2002). The differences
+between the two data sources are very large. There is a number of reasons that generate differ-
+ences between the CPS and the SCF sources. First, the CPS is individual-based whereas the SCF
+is household-based. Second, the SCF oversamples rich households to better capture the upper tail
+of the income distribution. In addition, my own treatment of the CPS data in order to construct
+measurements comparable to the magnitudes in the model necessarily generates big differences.
+
+16 However, these authors target the volatility of the change in hours instead of the volatility of levels. Both choices
+gives a measure of the size of fluctuations in leisure that households face. The choice of targeting the change in hours is
+not available with the CPS. When looking for a source of labor market data one faces a trade-off between the PSID and
+the CPS. The former is a long panel but the latter is much larger and its sampling constantly redesigned in order to be
+representative of the US population.
+17 Heathcote et al. (2004) also report a value of 0.02 for the period 1967–1996 using PSID data.
+18 Notice that since the parameters are calibrated to equilibrium statistics, all of them affect all calibration targets.
+However, in the text I highlight the statistic that is most influenced by each parameter.
+19 In Section 5.1, I show that when allowing households to hold negative net worth, the calibrated elasticity of labor
+reaches 0.59. See Section 5.2 for a further discussion on this issue and robustness checks for ν.
+                                J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                                     335
+
+
+Table 2
+Distributional statistics
+Variable                 cv             Gini          q1                q2                q3               q4               q5
+Hours
+  Model E0               0.22           0.11            0.21             0.31              0.35            0.37             0.40
+  Data (CPS)             0.22           0.11            0.24             0.31              0.33            0.35             0.42
+Earnings
+  Model E0               0.65           0.33           7.3%             12.4%             17.2%            23.0%            40.1%
+  Data (CPS)             0.56           0.29           7.9%             13.7%             18.0%            23.3%            37.1%
+  Data (SCF)             2.65           0.61          −0.2%              4.0%             13.0%            22.9%            60.2%
+Wealth
+  Model E0               1.37           0.65           0.1%              2.2%              9.2%            23.1%            65.4%
+  Data (SCF)             6.53           0.80          −0.3%              1.3%              5.0%            12.2%            81.7%
+Notes. cv refers to coefficient of variation. q1 , . . . , q5 refer, for earnings and wealth, to the share held by all people in the
+corresponding quintile with respect to the total. However, for hours it is the average number of hours worked by people
+in the corresponding quintile. Statistics from SCF correspond to the 1998 wave and are quoted from Budría et al. (2002).
+Statistics from SCF correspond to the 2002 wave.
+
+
+
+
+First, the statistics from CPS are cleaned from fixed heterogeneity in order to be comparable with
+the model, whereas the statistics from SCF are not. Second, the sample selection for the CPS is
+restricted to working-age individuals who supply positive hours in 2002 whereas the SCF con-
+tains the whole population. Comparing the model to data, we observe that the model does a very
+good job in replicating the distribution of labor earnings from the CPS. The average earnings at
+each quintile are very similar. The main difference arises in the top quintile, which earn more
+labor income in the model. This is reflected in the coefficient of variation and the Gini index,
+which are bigger for the model economy. Of course, and by construction, the model falls short
+from the observed concentration of the earnings distribution as measured in the SCF. Finally,
+due to the lack of fixed heterogeneity the overall concentration of the wealth distribution is much
+lower than in data. The model generates a Gini index for the wealth distribution equal to 0.65
+whereas the equivalent statistics in the SCF is 0.80.
+
+
+4. Results
+
+
+   The basic economic experiment performed in this paper is the comparison of allocations be-
+tween the steady state equilibrium of an incomplete markets economy calibrated to reproduce
+key statistics from data and the allocations of the steady state equilibrium of a complete markets
+counterpart. However, as stated in Section 2.5, there are multiple complete markets economies
+to use. I will solve for the complete markets economy that arises after a full transition from the
+incomplete markets economy to the new complete markets steady state equilibrium. Addition-
+ally, in Section 5.4, I also present results for the complete markets economy that corresponds to
+an equal-weight planner’s problem.20
+
+
+20 See Appendices A.1 and A.2 for details on how to solve for these two complete markets economies.
+336                         J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+4.1. Aggregate hours and labor productivity
+
+   The complete and incomplete markets economies imply distinctly different household’s be-
+havior in the labor market. A first evidence of this are the disparate measures of aggregate hours
+worked and aggregate labor in the different model economies. In Table 3 we see that aggregate
+hours worked are much higher in the incomplete markets economy (IM) than in its complete
+markets counterpart (CM). In the incomplete markets economy aggregate hours are calibrated
+to reproduce the 0.33 value found in data. In the complete markets economy aggregate hours
+equal 0.28, which implies that aggregate hours worked in the incomplete markets economy are
+about 18% higher than they would be in a world with state contingent assets.
+   In contrast to this result, aggregate labor is lower in the incomplete markets economy. Table 3
+shows that aggregate labor is 4.7% lower in the incomplete markets economy. The fact that hours
+worked are higher and aggregate labor is lower in the incomplete markets economy indicates that
+the average efficiency per hour worked must be lower in the incomplete markets economy. In-
+deed, we observe this in the third column of Table 3. The average amount of efficiency labor units
+per hour worked in the incomplete markets economy is 1.00 whereas it is 1.24 in the complete
+markets economy: average efficiency per hour worked is 19.3% lower under incomplete mar-
+kets. Additionally, we also see in Table 3 that the total productivity per hour worked, measured
+as output per hour, is markedly lower in the incomplete markets economy, 11.5% less.
+   The reasons for these results are quite straightforward. Under complete markets, households
+base the variation of hours worked across states entirely on the variation of efficiency units.
+The first order condition for the labor decision is given by Eq. (6). In the complete markets
+economy the consumption level is the same regardless of the realization of ε. Therefore, l adjusts
+to movements on ε alone. In other words: the realization of the idiosyncratic shock does not
+carry any wealth effect and the variations of hours worked respond only to the substitution effect.
+However, under incomplete markets the realization of the shock does change consumption levels.
+Low ε implies low consumption and therefore high marginal utility of consumption. Therefore,
+a household with low ε chooses to work more in the incomplete markets economy due to the
+high value of the wage obtained. This effect is strengthened when the idiosyncratic shocks are
+persistent. Overall, the average productivity per hour worked is lower in the incomplete markets
+economy because labor is used to smooth consumption fluctuations across states and therefore
+does not fully respond to variations in productivity.
+   To illustrate this latter point, let us look at the graphical counterpart of Eq. (6). In Fig. 1,
+I plot the policy function for hours worked in the incomplete markets economy.21 We observe
+that, other things equal, work effort increases with the efficiency endowment and decreases with
+wealth. However, as shown in Table 4, the correlation between efficiency units and assets is high,
+
+
+                         Table 3
+                         Aggregate labor and productivity
+                                                   H            L            L/H               Y /H
+                         IM economy                0.33         0.33         1.00              3.50
+                         CM economy                0.28         0.35         1.24              3.96
+                         IM/CM − 1 (%)             18.0         −4.7         −19.3             −11.5
+
+
+
+21 In terms of the policy functions defined in Section 2.4 it corresponds to 1 − g l (ε, a).
+                           J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                             337
+
+
+
+
+                             Fig. 1. Policy functions for hours under incomplete markets.
+Note. Productivity shocks are labelled such that ε7 > ε4 > ε1 . Hours are reported as fraction of total available time.
+Assets are reported in levels, where 1.15 corresponds to the (per capita) output of the economy.
+
+
+                                 Table 4
+                                 Correlations
+                                                        corr(a, ε)          corr(h, ε)
+                                 IM economy             0.51                0.02
+                                 CM economy             0.00                0.74
+
+
+
+0.51. This means that in equilibrium good shocks are associated to high wealth and bad shocks
+to low wealth. The reason behind this is that shocks are very persistent. Households receive
+long series of good or bad shocks, which make them accumulate or deplete wealth. Then, in
+equilibrium, we observe that many of the very productive households are also wealth rich and
+therefore they do not work much because the marginal value of each unit of consumption is low.
+On the other hand, we observe that many of the low productive households are also wealth poor,
+supplying a lot of hours in spite of their low return because the marginal value of an extra unit
+of consumption is very high for them. This results in a low correlation of wages and hours and
+a low ratio of aggregate units of labor to aggregate hours.22 In contrast, under complete markets
+the correlation between wealth and hours worked is zero and the correlation between hours and
+labor productivity is as high as 0.74.
+   Marcet et al. (2003), in a related work, hold that hours worked are lower under incomplete
+markets. In a similar model, they set up household uncertainty as a work opportunity. Households
+have a choice of hours only if given a (stochastic) work opportunity. These authors find that the
+number of hours worked will be smaller in an incomplete markets economy because employed
+workers are richer in the incomplete markets world than in a complete markets economy and
+therefore consume more leisure. Of course, the unemployed are poorer but they do not supply
+hours of work. Their setting, therefore, does not allow for substitution of labor across different
+states of the world. This is the main channel operating here: complete markets allow households
+to work many hours when the market return is high and work few or none when the market return
+
+22 The exact amount in which this happens is chosen by targeting the 0.02 value in data of the correlation between hours
+and wages.
+338                         J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+is low. The substitution of labor across states in the complete markets economies makes the
+average return per hour worked much higher and therefore lifetime income higher for everybody.
+Households are hence richer in the complete markets economies and this wealth effect makes
+them demand more leisure.
+
+4.2. Precautionary savings or working longer hours?
+
+    The first column in Table 5 reports precautionary savings.23 Precautionary savings equals
+18.6%, which means that 18.6% of aggregate capital is there due to the lack of markets to insure
+against idiosyncratic risk.24 Is this a big or a small number? In the second column of Table 5
+I report a similar statistic but instead of measuring it over aggregate capital I do it over the
+capital to labor ratio. This would be the type of precautionary savings captured by models without
+labor choice since it directly arises from the lower marginal product of capital in the incomplete
+markets economy. In a model without labor choice, the whole difference between capital labor
+ratios would be imputed to aggregate capital. We can see that precautionary savings measured
+over capital labor ratios are higher, up to 22.4%. This is the type of effect highlighted by Aiyagari
+(1994) and it is solely due to the uninsurable variation of labor earnings when the markets are
+incomplete.25
+    Finally in the third column of Table 5, I report an equivalent statistic computed over aggregate
+hours. That is to say, I report the fraction of hours worked in the incomplete markets economy in
+excess of the hours worked in the complete markets counterpart. I find that 15.2% of the hours
+worked in the incomplete markets economy are due to lack of insurance. Therefore, we observe
+that precautionary hours are in the same order of magnitude as precautionary savings albeit
+slightly smaller; households seem to be using work effort as much as savings in order to smooth
+their consumption profiles. Incidentally, note that the use of work effort as an instrument to avoid
+fluctuations in consumption is different from the concept of precautionary hours highlighted by
+Flodén (2005). This author refers to the use of hours of work before uncertainty is realized. In
+our model economy individuals choose work effort once they know the realization of their labor
+market productivity.
+
+                                  Table 5
+                                  Precautionary savings and precautionary hours
+                                                           K           K/L           H
+                                  1 − CM/IM (%)            18.6        22.4          15.2
+
+
+23 I measure precautionary savings as the difference between aggregate capital in the incomplete markets economy and
+aggregate capital in a complete markets economy, relative to aggregate capital in the incomplete markets economy. This
+measure can be interpreted as the fraction of capital in the incomplete markets economy that is there due to the lack of
+state contingent markets.
+24 Within the general equilibrium literature, measurements of precautionary savings range from 3% to more than 100%
+of total wealth. The wide range of estimates is explained by the size and persistence of the non-permanent component of
+the idiosyncratic uncertainty in the earnings process that different authors consider. See Díaz et al. (2003) and references
+therein for details.
+25 According to the literature of precautionary savings in partial equilibrium it is actually the interaction of uncertainty
+with the convexity of the marginal utility what matters. However, with borrowing constraints we obtain precautionary
+savings regardless of the sign of the third derivative of the utility function. See Aiyagari (1994) or Huggett and Ospina
+(2001) for details.
+                       J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352             339
+
+
+4.3. The size of the economy
+
+    The standard result that incomplete markets economies are always bigger in terms of both
+capital and output (as pointed out by Huggett, 1993 or Aiyagari, 1994) is obtained for economies
+where labor is exogenous and thus it does not change when we modify either the market struc-
+ture or the amount of uncertainty. Therefore, a higher capital to labor ratio necessarily implies
+higher aggregate capital and thence higher aggregate output and higher aggregate consumption.
+However, once we allow households to adjust labor supply, the higher capital to labor ratio under
+incomplete markets does not necessarily lead to a higher aggregate capital. And higher aggregate
+capital does not necessarily lead to higher output either. Furthermore, higher aggregate output
+does not necessarily imply higher aggregate consumption.
+    Table 6 reports the aggregate allocations of the economy. We see that aggregate output is 4.4%
+larger under the incomplete markets case. However, as it will be shown in Section 5.3, we can
+easily parameterize an incomplete markets economy that generates aggregate output smaller than
+in its complete markets counterpart. The change in aggregate output can be decomposed into its
+two determinants, aggregate labor and aggregate capital. We have already seen that aggregate
+labor is smaller and aggregate capital is bigger in the incomplete markets economies.
+    Finally, in spite of larger aggregate output, the incomplete markets economy displays an
+amount of aggregate consumption slightly below what is obtained in the complete markets set-up.
+Does this mean that the incomplete markets economy is dynamically inefficient? This cannot be
+the case since the interest rate is positive. What happens is the following. Steady state consump-
+tion C is equal to F (K, L) − δK. With exogenous labor supply, the fact that the incomplete
+markets economy has more capital and lower consumption necessarily implies that FK < δ and
+therefore that the economy is dynamically inefficient. However, with endogenous labor a fall
+in aggregate labor L can make output increase less than δK while still having FK > δ. This is
+indeed what happens.
+
+4.4. Welfare gains
+
+   In these type of economies, households have two costly margins of adjustment in order to
+smooth their consumption profiles. On the one hand, they can save in advance so that when bad
+times come there is a buffer stock of assets to avoid large drops in consumption. Building pre-
+cautionary savings is costly because it implies saving at an interest rate lower than the subjective
+time discount rate. On the other hand, households can adjust their work effort when a shock is
+realized. If wages fall, the household can prevent consumption from falling too much by working
+additional hours and thus making sure that labor income does not suffer so much. This is costly
+because it implies working longer hours precisely when the household is less productive. A nat-
+ural quantitative question in this framework is whether these costs are big. Or in other words, is
+the absence of state contingent bonds to trade the idiosyncratic labor market risk very costly?
+
+                     Table 6
+                     The size of the economy
+                                               Y       C            K           L
+                     IM economy                1.16    0.87         3.47        0.33
+                     CM economy                1.11    0.87         2.83        0.35
+                     IM/CM − 1 (%)             4.4     −0.6         22.8        −4.7
+340                        J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+    To answer this question I compute the percentage consumption increase that we should give
+forever to every individual in the incomplete markets world for her to be indifferent between the
+incomplete markets world and waking up in a complete markets economy in steady state with the
+same level of assets and labor market productivity. Of course, these welfare measure will differ
+heavily among households. Households with very few assets are badly self-insured, so we should
+expected them to obtain sizeable gains of complete markets. The reason is double. First, they will
+be able to eliminate fluctuations in consumption. This is the pure insurance effect. Second, they
+will be able to work long hours when more productive and enjoy leisure when less productive.
+These are the gains of a more efficient allocation of work effort. In contrast, households with
+large stocks of asset are very well self-insured in the incomplete markets economy. They are not
+expected to gain much from moving into a world with insurance markets because their consump-
+tion profiles are already quite smooth and because their work effort already tracks productivity.
+However, the world with state contingent bonds differs from the incomplete markets economy
+not only in the insurance technology, but also in the equilibrium prices. Precisely, since the capi-
+tal to labor ratio is smaller in the complete markets economy, the interest rate will be higher and
+the wage rate lower than in the incomplete markets economy. Therefore, in contrast to the partial
+equilibrium effects, asset-rich households benefit more from moving to complete markets than
+asset-poor households because the change in prices is beneficial to them. Hence, the relative size
+of the partial equilibrium effects and the price effect will determine whether the welfare costs of
+market incompleteness are increasing or falling with the level of assets.
+    In order to decompose the welfare gains into their partial equilibrium and their price compo-
+nents, I will define a second measure of welfare change. I solve the household problem under
+incomplete markets for the pair of prices of complete markets. Then, I look for the relative in-
+crease in consumption to be given to every individual of this world such that they are indifferent
+with the complete markets economy. This welfare measure gives the partial equilibrium effect.
+Figure 2 plots individual welfare gains against assets for three different labor market produc-
+tivity shocks. Panel (a) shows total welfare increase whereas panel (b) only shows the partial
+equilibrium component. The difference between them corresponds to the price effect. As stated
+above, the welfare benefits of complete markets solely due to partial equilibrium effects are the
+biggest for the asset poor and decrease monotonically with the level of assets. Not shown in
+the graphs, the welfare benefits due to the change in prices increase monotonically with assets.
+
+
+
+
+                  (a) overall welfare gains                               (b) partial equilibrium component
+
+                                                 Fig. 2. Welfare gains.
+Note. Productivity shocks are labelled such that ε7 > ε4 > ε1 . Consumption increase is the relative increase in consump-
+tion. Assets are reported in levels, where 1.15 corresponds to the (per capita) output of the economy.
+                           J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                              341
+
+
+The overall effect is a combination of both. For instance, for the lowest realization of the shock,
+ε1 , the partial equilibrium components dominate for low levels of assets as the welfare gains of
+complete markets decrease with assets. However, there is a point where the individual is quite
+well self-insured and the change in prices is more important: from here onwards welfare gains of
+complete markets increase with assets.
+    The actual values of these welfare gains are impressive. For instance, households with no
+assets and the lowest market productivity enjoy a welfare increase in complete markets equivalent
+to a 35% increase in consumption. Yet, for this type of individuals the change in prices implies
+income losses; without the price effect their welfare gains would be as large as 47%. Table 7
+reports the average over the whole population of these welfare gains: they turn out to be as big as
+16.1%. Looking at the decomposition of the welfare gains, the average of the partial equilibrium
+component is 15.2% and the average of the price component is 0.9%. Therefore, the bulk of the
+aggregate welfare gains of complete markets is due to its partial equilibrium effects, with the
+welfare benefits due to the change in prices being more or less offset among individuals.
+    It is interesting to note the small size of the price component. This is the result of two coun-
+teracting forces. First, the price changes (interest rate increase and wage decrease) imply shifting
+resources from low consumption individuals to high consumption individuals. Low consump-
+tion individuals own few assets and are intensive in labor income. Therefore the price change
+decreases the share of output they receive. In contrast, high consumption individuals are asset
+rich and work very little. Therefore, they benefit with the price changes. Since marginal util-
+ity is decreasing in consumption, this redistribution of resources generates, on average, welfare
+losses.26 Second, the change in prices also accounts for the change in aggregate allocations of
+the economy. The complete markets economy allows larger aggregate consumption and leisure.
+This brings welfare gains. As seen, these two effects turn out to offset each other. This result adds
+value to the work by Heathcote et al. (2005). In a complementary work, they obtain analytical
+expressions for the aggregate welfare gains of introducing insurance markets. The cost they pay
+is that their results only account for the partial equilibrium component. However, what we see is
+that for the aggregate welfare gains, the general equilibrium effect hardly matters.
+
+
+Table 7
+Individual welfare gains (%)
+                               Average equivalent variation of consumption
+                               all             q1               q2                q3               q4               q5
+Full model                     16.1            11.5             12.5              14.6             16.8             25.2
+  PE component                 15.2            5.5              10.0             13.8              18.4             28.5
+  GE component                  0.9           −9.1              −5.9             −1.7               4.3             16.9
+Fixed hours                     9.3             6.3               7.0              8.3              9.9             14.8
+  PE component                  9.4            3.4               5.8              8.2              11.2             18.4
+  GE component                 −0.1           −7.2              −4.5             −1.3               2.7              9.6
+Transition                     16.5            12.9             13.9              14.6             17.5             23.5
+Notes. all refers to the average over the whole population. q1 , . . . , q5 refer to the average within the corresponding
+quintile. PE and GE mean partial and general equilibrium respectively.
+
+
+26 This idea is emphasized by Dávila et al. (2005), who show that due to distributional effects the actual level of
+aggregate capital in an incomplete markets economy is too low.
+342                        J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+   A further question about the welfare gains is the relative importance of the use of labor as a
+self-insurance mechanism. Recall that the productivity gains in the complete markets economy
+are due to the fact that households use their work effort to exploit the variance in labor market
+productivity. In order to measure the relative importance of labor flexibility, I perform the follow-
+ing experiment. I take the households in the incomplete markets economy and force all of them
+to work a fixed amount of time equal to the calibrated average number of hours, 0.33. I solve for
+the new steady state equilibrium. Then, I compute the same welfare measures as before, with the
+complete markets economy being also forced to have a fixed labor equal to the average of 0.33.
+How big are the welfare gains from moving to the complete markets world? Table 7 reports this
+figure: on average, 9.3%. This implies that a 42% of the welfare gain of complete markets is due
+to the possibility of adjusting labor supply. As before, we can separate the welfare gains into a
+partial equilibrium and a price component. In the fixed labor model this is particularly informa-
+tive because the partial equilibrium component is solely due to insurance, with no possibility of
+labor reallocation. I find the average of the partial equilibrium gains to be equal to 9.4%. There-
+fore, 62% of the partial equilibrium gains are due to the pure insurance effect and 38% are due
+to the labor reallocation opportunities. Hence, I conclude that the substitution of hours of work
+across states in the complete markets setting is a major source of welfare improvement.
+
+
+4.5. The transition
+
+
+    The comparison between steady states can be complemented by looking at how the econ-
+omy evolves from the incomplete markets setting to the steady state equilibrium with complete
+markets. In Appendix A.2, I explain how to solve for the transition.
+    In Fig. 3, I show the simulated transition paths for the capital to labor ratio, aggregate output,
+aggregate capital, aggregate labor, aggregate consumption and aggregate hours of work. We ob-
+serve that in period t = 1, once we allow households to trade Arrow securities, the capital to labor
+ratio jumps up. Then it declines gradually to its new steady state value. The reason is that at t = 1
+capital is predetermined and only aggregate labor adjusts. As the transition goes on, aggregate
+capital falls to its new steady state level and aggregate labor increases. It is also important to note
+that at t = 1 consumption jumps up and gradually declines to its new steady state level.27 This is
+particularly good news: since in the new steady state aggregate capital will be lower, some extra
+consumption can be afforded during the transition. Then, once the economy stabilizes in the new
+steady state, aggregate consumption remains slightly above its initial value. In contrast, we ob-
+serve that work effort is higher at the beginning of the transition and it gradually declines to its
+complete markets steady state level. Therefore, leisure during the transition is lower than in the
+final steady state. Hence, in terms of welfare, accounting for the transition implies considering a
+time period where consumption is higher and leisure lower than in the final steady state. Which
+of these effects prevails? In the third row of the first panel in Table 7, I report the average over the
+whole population and within each quintile of the welfare increase when explicitly accounting for
+the transition. I find this average to be equal to 16.5% of consumption in the incomplete markets
+economy. This is 0.4 percentage points more.
+
+
+27 Nonetheless, it falls slightly below its incomplete markets level for a while, tracking the u-shaped profile of output.
+                           J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                              343
+
+
+
+
+                                        Fig. 3. Transition of aggregate variables.
+Note. Variables are scaled relative to their level in the incomplete markets economy. The dashed line serves as reference
+for the incomplete markets level.
+
+
+
+5. Robustness
+
+   In this section, I want to show that, although there may be important quantitative adjustments,
+the qualitative results prevail once we change certain parameters of the model. In Section 5.1,
+I show that relaxing the borrowing constraints of households in the incomplete markets econ-
+omy does not affect the results. This is an important exercise since the tightness of borrowing
+constraints is a crucial determinant of the available financial trades for an incomplete markets
+economy. Next, in Section 5.2, I look at changes in ν, the parameter driving the intertemporal
+elasticity of substitution of labor. I do so because this is a parameter value over which there are
+multiple estimates that are somewhat different from the values chosen in this paper. With a more
+inelastic labor supply the quantitative results are less impressive. However, changes in ν do not
+modify the main qualitative results of the paper. In Section 5.3, I use a more persistent wage
+process. Finally, in Section 5.4, I solve for a different complete markets economy and for the
+representative agent economy.
+
+5.1. The borrowing constraints
+
+   A possible objection to the results shown so far is that allowing households to borrow in-
+creases the ability to move resources from high wage periods to low wage periods and therefore
+may diminish the use of hours as a smoothing mechanism. To probe this issue, I calibrate a new
+344                       J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352
+
+
+Table 8
+Calibration targets and model parameters
+Parameter            Target                      Calibrated value
+                                                 Model E0             a = −1.00Y             ν = 8.0            HP
+σ                    corr(h, ε) = 0.02           1.458                1.514                  1.412              0.992
+ν                    cv(h) = 0.22                2.833                3.459                  8.000              1.290
+λ                    H = 0.33                    0.856                0.674                  0.110              1.545
+β                    K/Y = 3.00                  0.945                0.948                  0.948              0.955
+θ                    wL/Y = 0.64                 0.640                0.640                  0.640              0.640
+δ                    I /Y = 0.25                 0.083                0.083                  0.083              0.083
+Notes. For the economy with ν = 8.0 the cv(h) is kept free and turns out to be 0.09. For all other economies the model
+parameters deliver the same 6 statistics.
+
+
+
+
+economy to the same statistics from data as before. In this new economy, households are allowed
+to borrow an amount equivalent to the average annual income of the economy.28
+    Table 8 presents the parameter values for this economy together with the ones for the bench-
+mark case (model E0 ). The first interesting result is that we need higher curvature households
+for the borrowing economy to be consistent with the same observed statistics. When households
+are allowed to borrow, they have a better financial technology to keep a smooth consumption
+profile and thus they are more inclined to work harder when the shock is good and rest when
+the productivity is low. Therefore, for the economy to show the low correlation between hours
+and wages and the given volatility of hours, we need households to be less willing to substitute,
+that is to say, we need higher σ and ν. As Table 8 shows, for the economy where households
+are allowed to borrow up to the average per capita income of the economy ν equals 3.459. This
+value implies an intertemporal elasticity of substitution of labor equal to 0.59, almost at the point
+estimate in data by Domeij and Flodén (2005).
+    Overall, the quantitative effects of borrowing are only minor. The second panel of Table 9
+shows that when allowing for borrowing the differences in hours worked between complete and
+incomplete markets are slightly smaller, although very similar to the ones for the case with no
+borrowing. A way to interpret this is as follows. With the possibility of borrowing households
+need to use hours of work as smoothing mechanism to a lesser degree. This implies that for the
+model to produce the same amount of hours worked as in data we need to decrease λ, the weight
+of leisure in the utility function. Then, in complete markets a lower λ implies a higher amount of
+hours worked. Similarly, the productivity gains of market completeness, measured by both labor
+efficiency and output per hour worked, barely change.
+    Regarding precautionary savings, the second row of Table 10 shows they fall slightly when
+we allow for borrowing. Allowing for borrowing preserves the essence of the results: (1) precau-
+tionary savings are smaller than measured by a model without labor choice and (2) the increase
+in hours worked is in the same order of magnitude as the increase in total savings.
+    Finally, Table 11 reports the welfare gains of complete markets. For the borrowing economy
+the average of welfare gains over the population is 14.6%, only one and a half percentage points
+below what was measured by means of the economy where no borrowing was allowed.
+
+
+28 Notice that for this parametric experiment we are not taking into consideration that households may prefer not to
+work and repudiate the debt and the problems for the existence of a credit market that this would pose.
+                           J. Pijoan-Mas / Review of Economic Dynamics 9 (2006) 326–352                              345
+
+
+Table 9
+Aggregate allocations
+                               H              L                L/H               Y /H              Y               C
+Model E0
+ IM economy                    0.33           0.33             1.00              3.50              1.16            0.87
+ CM economy                    0.28           0.35             1.24              3.96              1.11            0.87
+ IM/CM − 1 (%)                 18.0           −4.7             −19.3             −11.5             4.4             −0.6
+Model a = −1.0Y
+ IM economy                    0.33           0.33             1.00              3.50              1.16            0.87
+ CM economy                    0.29           0.35             1.20              3.87              1.12            0.88
+ IM/CM − 1 (%)                 14.0           −4.6             −16.3             −9.5              3.2             −1.1
+Model ν = 8.0
+ IM economy                    0.33           0.33             1.00              3.50              1.15            0.87
+ CM economy                    0.32           0.34             1.08              3.49              1.10            0.86
+ IM/CM − 1 (%)                 4.7            −3.0             −7.3              0.4               5.0             0.6
+Model HP
+ IM economy                    0.33           0.33             1.00              3.50              1.16            0.87
+ CM economy                    0.26           0.36             1.39              4.64              1.21            0.94
+ IM/CM − 1 (%)                 26.1           −9.2             −28.0             −24.5             −4.7            −7.4
+
+
+                        Table 10
+                        Precautionary savings and precautionary hours (%)
+                                                        K                K/L               H
+                        Model E0                        18.6             22.4              15.2
+                        Model a = −1.0Y                 15.6             19.4              12.3
+                        Model ν = 8.0                   17.4             19.9               4.5
+                        Model HP                         3.7             12.6              20.7
+
+
+Table 11
+Individual welfare gains (%)
+                               Average equivalent variation of consumption
+                               all              q1               q2               q3               q4               q5
+Model E0                       16.1             11.5             12.5             14.6             16.8             25.2
+Model a = −1.0Y                14.6             10.2             11.1             13.0             15.5             23.4
+Model ν = 8.0                  11.5              8.2              8.9             10.4             12.2             18.0
+Model HP                       15.5             12.1             12.6             14.4             16.2             22.1
+Notes. all refers to the average over the whole population. q1 , . . . , q5 refer to the average within the corresponding
+quintile.
+
+
+5.2. The intertemporal elasticity of substitution of labor
+
+   The quantitative results of the paper depend on the households willingness to substitute leisure
+and consumption across time and states of the world. This behavior is mainly determined by ν
+and σ . The choice of these parameters, therefore, should be guided by households observed be-
+havior. The parameter ν is obtained from the observed volatility of hours worked. The parameter
+σ drives the correlation between hours and wages.
+   However, the intertemporal elasticity of substitution of labor implied by the calibrated ν in
+the incomplete markets economy, 0.72, is a bit larger than what other authors have typically
+
