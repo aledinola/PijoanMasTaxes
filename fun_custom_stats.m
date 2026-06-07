@@ -16,6 +16,13 @@ function custom_stats = fun_custom_stats(~,Policy,StationaryDist,Params,FnsToEva
 
 custom_stats = struct();
 
+% TODO: When we call EvalFnOnAgentDist_AllStats_InfHorz here inside
+% fun_custom_stats, we need only Mean and StdDeviation, so we should write
+% simoptions.whichstats to save time. But when we call
+% EvalFnOnAgentDist_AllStats_InfHorz from main, we need also Gini
+% coefficients and other statistics, so simoptions.whichstats should not
+% apply there.
+
 AllStats = EvalFnOnAgentDist_AllStats_InfHorz(StationaryDist,Policy, ...
     FnsToEvaluate,Params,[],n_d,n_a,n_z,d_grid,a_grid,z_gridvals,simoptions);
 

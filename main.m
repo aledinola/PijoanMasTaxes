@@ -6,6 +6,11 @@
 % The parameters are fixed at the Pijoan-Mas (2006) calibrated values.
 % The general equilibrium search is written in terms of r, which is
 % equivalent to searching over K/L through the firm's FOC.
+%
+% TODO: When we call EvalFnOnAgentDist_AllStats_InfHorz for calibration, we 
+% need only Mean and StdDeviation, so we should write simoptions.whichstats 
+% to save time. When we call EvalFnOnAgentDist_AllStats_InfHorz at the end,
+% we do need all statistics, so simoptions.whichstats should be modified
 
 clear,clc,close all,format long g
 
@@ -16,7 +21,7 @@ mypath = fullfile('..','VFIToolkit-matlab');
 addpath(genpath(mypath))
 
 % Flag for saving output (tables and figures)
-do_save     = 1;              % Set to 1 to save LaTeX tables and figures
+do_save     = 0;              % Set to 1 to save LaTeX tables and figures
 results_dir = 'results';      % Folder for saved output
 
 if do_save == 1 && ~exist(results_dir, 'dir')
@@ -25,15 +30,15 @@ end
 
 %% Set computational options
 
-do_calib  = 0;   % 0=solve once, 1=calibrate six parameters in GE
-do_GE     = 0;   % 0=solve at fixed K/L, 1=solve GE over r
+do_calib  = 1;   % 0=solve once, 1=calibrate six parameters in GE
+do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
 
 % --- Value functions options
 vfoptions=struct(); 
-vfoptions.lowmemory     = 0;
+vfoptions.lowmemory     = 0;    % If 1, less memory intensive
 vfoptions.verbose       = 0;
 vfoptions.tolerance     = 1e-9; % VFI tolerance
 vfoptions.maxiter       = 500;  % VFI max number of iterations
@@ -42,7 +47,7 @@ vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
 vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid,1=a' on finer grid
-vfoptions.ngridinterp     = 15;
+vfoptions.ngridinterp     = 15; % number of extra points b/w points on coarse grid
 %vfoptions.divideandconquer = 0;
 
 % --- Distribution / simulation options
@@ -63,10 +68,10 @@ heteroagentoptions.maxiter                  = 100;
 %% Set economic parameters
 
 % --- Preference parameters
-Params.beta   = 0.945; % Discount factor
-Params.sigma  = 1.458; % Coefficient of relative risk aversion
-Params.nu     = 2.833; % Curvature of labor disutility
-Params.lambda = 0.856; % Weight of labor in utility
+Params.beta   = 0.96; %0.945; % Discount factor
+Params.sigma  = 1.3;  %1.458; % Coefficient of relative risk aversion
+Params.nu     = 2.5;  %2.833; % Curvature of labor disutility
+Params.lambda = 0.5;  %0.856; % Weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
@@ -147,8 +152,7 @@ FnsToEvaluate.H = @(d, aprime, a, z) d;   % Hours of work
 % --- General equilibrium conditions
 % Conditions are written as guessed price minus firm-implied price. In
 % stationarity, aggregate current assets and next-period assets coincide.
-GeneralEqmEqns.CapitalMarket = @(r, K, L, theta, delta) ...
-    r - ((1 - theta) .* (K ./ L).^(-theta) - delta);
+GeneralEqmEqns.CapitalMarket = @(r,K,L,theta,delta) r-((1-theta)*(K / L)^(-theta)-delta);
 
 GEPriceParamNames = {'r'};
 
@@ -168,7 +172,13 @@ if do_calib == 1
     TargetMoments.CustomModelStats.wL_to_Y  = Targets.wL_to_Y;
     TargetMoments.CustomModelStats.I_to_Y   = Targets.I_to_Y;
 
+    % TODO: Are we sure we have to include targets like H,K_to_Y,wL_to_Y,
+    % I_to_Y as fields of CustomModelStats? I assumed that CustomModelStats 
+    % is only for statistics that are not part of the standard outputs of 
+    % EvalFnOnAgentDist_AllStats_InfHorz, so in this case only corr_h_z
+
     caliboptions = struct();
+    caliboptions.verbose = 1;
     caliboptions.CustomModelStats = @fun_custom_stats;
     caliboptions.jointoptimization = 1;
     caliboptions.fminalgo = 8;
@@ -186,12 +196,18 @@ if do_calib == 1
     calib_heteroagentoptions.constrainAtoB = GEPriceParamNames(:);
     calib_heteroagentoptions.constrainAtoBlimits.r = [0.001, 0.150];
 
+    tStart = tic;
+    % TODO: Can CalibrateBIHAModel return also the values of the model
+    % moments used as targets in calibration? WITHOUT modifying
+    % CalibrateBIHAModel or any other toolkit function.
     [CalibParams, calibsummary] = CalibrateBIHAModel( ...
         CalibParamNames, TargetMoments, ...
         n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
         ReturnFn, Params, DiscountFactorParamNames, ParametrizeParamsFn, ...
         GEPriceParamNames, FnsToEvaluate, GeneralEqmEqns, ...
         calib_heteroagentoptions, caliboptions, vfoptions, simoptions);
+    time_calib = toc(tStart);
+    fprintf('CalibrateBIHAModel: %.4f seconds\n', time_calib);
 
     calib_param_names = fieldnames(CalibParams);
     for ii = 1:numel(calib_param_names)
@@ -200,6 +216,13 @@ if do_calib == 1
     end
 
     fprintf('Calibration objective value: %g\n', calibsummary.objvalue);
+    % TODO: Save final calibrated parameter values, model targets, data targets,
+    % calibration weights and calibration objective value to a txt file
+    % The txt file should have following blocks:
+    % Block 1: calibrated parameter values with name and numeric value
+    % Block 2: name of target, data value, model value and weight
+    % Block 3: final calibration objective value
+
 end
 
 if do_calib == 0 && do_GE == 1
@@ -501,9 +524,9 @@ end
 
 % Policy function for consumption c(a,z)
 figure;
-plot(a_grid, pol_c(:, 1),            'LineWidth', 2); hold on;
-plot(a_grid, pol_c(:, round(n_z/2)), 'LineWidth', 2);
-plot(a_grid, pol_c(:, n_z),          'LineWidth', 2);
+plot(a_grid, pol_c(:, 1),  'k-',          'LineWidth', 2); hold on;
+plot(a_grid, pol_c(:, round(n_z/2)),'k--', 'LineWidth', 2);
+plot(a_grid, pol_c(:, n_z), 'k:',      'LineWidth', 2);
 legend('z_1', 'z_{mid}', 'z_{high}', 'Location', 'best');
 xlabel('Assets');
 ylabel('Consumption');
