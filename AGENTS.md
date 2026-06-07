@@ -44,6 +44,13 @@ unless existing extracted artifacts are missing or insufficient. To save time
 and tokens, store any PDF-reading artifacts, such as extracted text snippets,
 page-range text files, or rendered pages, inside `pijoan_mas_paper`.
 
+## Branch Workflow
+
+The `main` branch is intentionally left showing the current
+`gridinterplayer=1` problem, so VFI Toolkit users can reproduce and inspect the
+issue. Use the `ale` branch as the temporary investigation playground for
+experiments, diagnostics, and fixes.
+
 ## Toolkit Boundary
 
 The VFI Toolkit is stored outside this repo at
