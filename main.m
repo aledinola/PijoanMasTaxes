@@ -240,32 +240,27 @@ end
 ave_hours = AllStats.H.QuantileMeans;
 
 %% Correlation statistics
-% Correlation calculations are temporarily disabled while debugging
-% vfoptions.gridinterplayer/simoptions.gridinterplayer behavior. This avoids a
-% toolkit correlation error and lets the script expose any nonsensical economic
-% aggregates produced upstream by VFI, policy conversion, distribution, or
-% moment evaluation.
-%
-% % --- Toolkit command for correlation
-% FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
-% FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
-% FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
-% Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
-%
-% corr_h_z = Corr.hours.CorrelationWith.productivity;
-% corr_a_z = Corr.wealth.CorrelationWith.productivity;
-%
-% % --- User-written function for correlation
-% z_mat     = repmat(z_grid', n_a, 1);
-% corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
-% corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
-%
-% if abs(corr_h_z-corr_h_z2)>1e-6
-%     warning('corr_h_z')
-% end
-% if abs(corr_a_z-corr_a_z2)>1e-6
-%     warning('corr_a_z')
-% end
+
+% --- Toolkit command for correlation
+FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
+FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
+FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
+Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
+
+corr_h_z = Corr.hours.CorrelationWith.productivity;
+corr_a_z = Corr.wealth.CorrelationWith.productivity;
+
+% --- User-written function for correlation
+z_mat     = repmat(z_grid', n_a, 1);
+corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
+corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
+
+if abs(corr_h_z-corr_h_z2)>1e-6
+    warning('corr_h_z')
+end
+if abs(corr_a_z-corr_a_z2)>1e-6
+    warning('corr_a_z')
+end
 
 %% Aggregate moments and dispersion
 
@@ -298,7 +293,7 @@ fprintf('r                                       : %f \n', Params.r);
 fprintf('w                                       : %f \n', Params.w);
 disp('------------------------------------');
 disp('MOMENTS');
-%fprintf('Corr(h,z)                               : %f \n', corr_h_z);
+fprintf('Corr(h,z)                               : %f \n', corr_h_z);
 fprintf('CV(h)                                   : %f \n', cv.hours);
 fprintf('Hours                                   : %f \n', agg.HH);
 fprintf('K/Y                                     : %f \n', agg.KK / agg.YY);
@@ -331,9 +326,9 @@ fprintf('q3 wealth                               : %f \n', shares.wealth(3));
 fprintf('q4 wealth                               : %f \n', shares.wealth(4));
 fprintf('q5 wealth                               : %f \n', shares.wealth(5));
 disp('------------------------------------');
-%disp('CORRELATIONS');
-%fprintf('Corr(h,z) hours and product             : %f \n', corr_h_z);
-%fprintf('Corr(a,z) wealth and product            : %f \n', corr_a_z);
+disp('CORRELATIONS');
+fprintf('Corr(h,z) hours and product             : %f \n', corr_h_z);
+fprintf('Corr(a,z) wealth and product            : %f \n', corr_a_z);
 
 
 %% Replicate Table 1 of Pijoan-Mas (2006)  (LaTeX)
@@ -349,8 +344,8 @@ if do_save == 1
     fprintf(fid, 'Parameter & Target & Value \\\\\n');
     fprintf(fid, '\\midrule\n');
 
-    %fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
-    %    corr_h_z, Params.sigma);
+    fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
+        corr_h_z, Params.sigma);
     fprintf(fid, '$\\nu$     & $cv(h)=%.2f$ & %.3f \\\\\n', ...
         cv.hours, Params.nu);
     fprintf(fid, '$\\lambda$ & $H=%.2f$ & %.3f \\\\\n', ...
