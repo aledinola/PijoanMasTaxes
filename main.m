@@ -3,9 +3,9 @@
 % Josep Pijoan-Mas, 2006. "Precautionary Savings or Working Longer Hours?"
 % Specifically, it reproduces Table 1, Table 2 and Figure 1.
 %
-% The parameters are fixed at the Pijoan-Mas (2006) calibrated values.
-% The general equilibrium search is written in terms of r, which is
-% equivalent to searching over K/L through the firm's FOC.
+% The script can either solve at fixed parameter values or calibrate selected
+% parameters in general equilibrium. The GE search is written in terms of r,
+% which is equivalent to searching over K/L through the firm's FOC.
 
 clear,clc,close all,format long g
 
@@ -15,8 +15,8 @@ clear,clc,close all,format long g
 mypath = fullfile('..','VFIToolkit-matlab');
 addpath(genpath(mypath))
 
-% Flag for saving output (tables and figures)
-do_save     = 0;              % Set to 1 to save LaTeX tables and figures
+% Flag for saving output (tables, figures, and calibration summary)
+do_save     = 0;              % Set to 1 to save outputs
 results_dir = 'results';      % Folder for saved output
 
 if do_save == 1 && ~exist(results_dir, 'dir')
@@ -25,7 +25,7 @@ end
 
 %% Set computational options
 
-do_calib  = 1;   % 0=solve once, 1=calibrate six parameters in GE
+do_calib  = 1;   % 0=solve once, 1=calibrate six parameters and r in GE
 do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
@@ -41,8 +41,8 @@ vfoptions.howards       = 80;   % Number of iterations for Howard
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid,1=a' on finer grid
-vfoptions.ngridinterp     = 15; % number of extra points b/w points on coarse grid
+vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid, 1=a' on finer grid
+vfoptions.ngridinterp     = 15; % number of extra points between coarse-grid points
 %vfoptions.divideandconquer = 0;
 
 % --- Distribution / simulation options
@@ -62,26 +62,30 @@ heteroagentoptions.maxiter                  = 100;
 
 %% Set economic parameters
 
-% --- Preference parameters
-Params.beta   = 0.96; %0.945; % Discount factor
-Params.sigma  = 1.3;  %1.458; % Coefficient of relative risk aversion
-Params.nu     = 2.5;  %2.833; % Curvature of labor disutility
-Params.lambda = 0.5;  %0.856; % Weight of labor in utility
+% --- Preference parameters: initial guesses for calibration, or fixed values
+%     when do_calib == 0. Trailing comments report the paper values.
+Params.beta   = 0.96; % paper: 0.945, discount factor
+Params.sigma  = 1.3;  % paper: 1.458, coefficient of relative risk aversion
+Params.nu     = 2.5;  % paper: 2.833, curvature of labor disutility
+Params.lambda = 0.5;  % paper: 0.856, weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
-% Paper targets used to report calibration and data comparisons.
+% Paper targets used for calibration and data comparisons.
 Targets.corr_h_z = 0.02;
 Targets.cv_h     = 0.22;
 Targets.H        = 0.33;
 Targets.K_to_Y   = 3.00;
 Targets.wL_to_Y  = 0.64;
 Targets.I_to_Y   = 0.25;
+CalibMomentNames = {'corr_h_z','cv_h','H','K_to_Y','wL_to_Y','I_to_Y'};
+CalibParamNames = {'beta','sigma','nu','lambda','theta','delta'};
+CalibWeights = ones(numel(CalibMomentNames),1);
 
-% Fixed-price runs start from the paper target K/Y=3. In GE mode the toolkit
-% solves over r, so K/Y=(K/L)^theta is used only to construct the initial r.
+% Fixed-price runs start from the paper target K/Y=3. In GE and calibration
+% runs, K/Y=(K/L)^theta is used only to construct the initial r.
 Params.K_to_L = Targets.K_to_Y^(1 / Params.theta);
 [Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
 
@@ -100,7 +104,8 @@ a_grid  = a_min + (a_max - a_min) * (linspace(0, 1, n_a)'.^a_curve);
 % Grid for labor
 d_grid  = linspace(0.001, 0.999, n_d)';
 
-% Productivity shocks
+% Productivity shocks: use the paper discretization by default, otherwise
+% approximate the AR(1) process with Tauchen's method.
 if do_pijoan == 1
     disp('Pijoan-Mas discretization of z with 7 points');
     fprintf('n_a = %d, n_d = %d \n', n_a, n_d);
@@ -139,14 +144,14 @@ DiscountFactorParamNames = {'beta'};
 ReturnFn = @(d, aprime, a, z, r, sigma, lambda, nu, theta, delta) ...
     Model_ReturnFn(d, aprime, a, z, r, sigma, lambda, nu, theta, delta);
 
-% --- Functions to evaluate on the distribution
+% --- Minimal functions needed for GE conditions and calibration targets
 FnsToEvaluate.K = @(d, aprime, a, z) a;   % Assets / capital
 FnsToEvaluate.L = @(d, aprime, a, z) z*d; % Labor in efficiency units
 FnsToEvaluate.H = @(d, aprime, a, z) d;   % Hours of work
 
-% --- General equilibrium conditions
-% Conditions are written as guessed price minus firm-implied price. In
-% stationarity, aggregate current assets and next-period assets coincide.
+% --- General equilibrium condition
+% The condition is guessed r minus firm-implied r. In stationarity, aggregate
+% current assets and next-period assets coincide.
 GeneralEqmEqns.CapitalMarket = @(r,K,L,theta,delta) r-((1-theta)*(K / L)^(-theta)-delta);
 
 GEPriceParamNames = {'r'};
@@ -156,7 +161,6 @@ GEPriceParamNames = {'r'};
 if do_calib == 1
     fprintf('Calibrating the stationary general equilibrium...\n');
 
-    CalibParamNames = {'beta','sigma','nu','lambda','theta','delta'};
     ParametrizeParamsFn = [];
 
     TargetMoments = struct();
@@ -173,7 +177,7 @@ if do_calib == 1
     caliboptions.jointoptimization = 1;
     caliboptions.fminalgo = 8;
     caliboptions.metric = 'sum_squared';
-    caliboptions.weights = ones(6,1);
+    caliboptions.weights = CalibWeights;
     caliboptions.constrainAtoB = CalibParamNames(:);
     caliboptions.constrainAtoBlimits.beta   = [0.800, 0.995];
     caliboptions.constrainAtoBlimits.sigma  = [1.010, 5.000];
@@ -245,9 +249,9 @@ PolicyValues = PolicyInd2Val_InfHorz(Policy, n_d, n_a, n_z, d_grid, a_grid, vfop
 % --- Stationary distribution
 StatDist = StationaryDist_InfHorz(Policy, n_d, n_a, n_z, pi_z, simoptions);
 
-% --- Additional functions to evaluate
+% --- Full set of functions for final reporting
 FnsToEvaluate.K        = @(d, aprime, a, z) a;    % assets
-FnsToEvaluate.L        = @(d, aprime, a, z) z*d;  % labor in effic units
+FnsToEvaluate.L        = @(d, aprime, a, z) z*d;  % labor in efficiency units
 FnsToEvaluate.H        = @(d, aprime, a, z) d;    % hours worked
 FnsToEvaluate.earnings = @(d, aprime, a, z, w) w*z*d; % labor earnings
 FnsToEvaluate.income   = @(d, aprime, a, z, r, w) w*z*d + r*a; % income
@@ -284,7 +288,7 @@ ValOnGrid=EvalFnOnAgentDist_ValuesOnGrid_InfHorz(Policy,FnsToEvaluate,Params,...
 pol_c = ValOnGrid.C; % c(a,z)
 
 if ~isequal(size(pol_c),[n_a,n_z])
-    error('Policy fir consumption computed by ValuesOnGrid is not correct')
+    error('Policy for consumption computed by ValuesOnGrid is not correct')
 end
 
 % Average hours by quintile
@@ -292,14 +296,16 @@ ave_hours = AllStats.H.QuantileMeans;
 
 %% Correlation statistics
 
-% --- Toolkit command for correlation
+% --- Toolkit cross-sectional correlations for reporting
 FnsToEvaluateCorr.hours        = @(d, aprime, a, z) d;
 FnsToEvaluateCorr.productivity = @(d, aprime, a, z) z;
 FnsToEvaluateCorr.wealth       = @(d, aprime, a, z) a;
 Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvaluateCorr, Params,[], n_d, n_a, n_z, d_grid, a_grid, z_grid,simoptions);
 
-corr_h_z = Corr.hours.CorrelationWith.productivity;
-corr_a_z = Corr.wealth.CorrelationWith.productivity;
+ModelMoments = fun_calibration_moments(AllStats,Corr,Params);
+
+corr_h_z = ModelMoments.corr_h_z;
+corr_a_z = gather(Corr.wealth.CorrelationWith.productivity);
 
 %% Aggregate moments and dispersion
 
@@ -312,31 +318,21 @@ GE_resid = GeneralEqmEqns.CapitalMarket(Params.r, agg.KK, agg.LL, ...
     Params.theta, Params.delta);
 
 % Coefficients of variation
-cv.hours    = AllStats.H.StdDeviation        / AllStats.H.Mean;
+cv.hours    = ModelMoments.cv_h;
 cv.earnings = AllStats.earnings.StdDeviation / AllStats.earnings.Mean;
 cv.income   = AllStats.income.StdDeviation   / AllStats.income.Mean;
 cv.wealth   = AllStats.K.StdDeviation        / AllStats.K.Mean;
 
-%% Calibration target moments
+%% Final calibration target moments
 
-CalibMomentNames = {'corr_h_z','cv_h','H','K_to_Y','wL_to_Y','I_to_Y'};
-
-ModelMoments = struct();
-ModelMoments.corr_h_z = corr_h_z;
-ModelMoments.cv_h     = cv.hours;
-ModelMoments.H        = agg.HH;
-ModelMoments.K_to_Y   = agg.KK / agg.YY;
-ModelMoments.wL_to_Y  = Params.w * agg.LL / agg.YY;
-ModelMoments.I_to_Y   = agg.II / agg.YY;
-
-if do_save == 1 && do_calib == 1
+if do_save == 1
     fid = fopen(fullfile(results_dir, 'calibration_summary.txt'), 'w');
 
-    fprintf(fid, 'Calibrated parameter values\n');
-    fprintf(fid, '---------------------------\n');
-    calib_param_names = fieldnames(CalibParams);
-    for ii = 1:numel(calib_param_names)
-        name_ii = calib_param_names{ii};
+    fprintf(fid, 'Parameter values\n');
+    fprintf(fid, '----------------\n');
+    summary_param_names = [CalibParamNames, GEPriceParamNames];
+    for ii = 1:numel(summary_param_names)
+        name_ii = summary_param_names{ii};
         fprintf(fid, '%-12s %.12g\n', name_ii, Params.(name_ii));
     end
 
@@ -346,12 +342,16 @@ if do_save == 1 && do_calib == 1
     for ii = 1:numel(CalibMomentNames)
         name_ii = CalibMomentNames{ii};
         fprintf(fid, '%-12s %16.12g %16.12g %16.12g\n', ...
-            name_ii, Targets.(name_ii), ModelMoments.(name_ii), caliboptions.weights(ii));
+            name_ii, Targets.(name_ii), ModelMoments.(name_ii), CalibWeights(ii));
     end
 
     fprintf(fid, '\nCalibration objective value\n');
     fprintf(fid, '---------------------------\n');
-    fprintf(fid, '%.12g\n', calibsummary.objvalue);
+    if do_calib == 1
+        fprintf(fid, '%.12g\n', calibsummary.objvalue);
+    else
+        fprintf(fid, 'not computed (do_calib=0)\n');
+    end
 
     fclose(fid);
 end
@@ -375,10 +375,10 @@ disp('------------------------------------');
 disp('MOMENTS');
 fprintf('Corr(h,z)                               : %f \n', corr_h_z);
 fprintf('CV(h)                                   : %f \n', cv.hours);
-fprintf('Hours                                   : %f \n', agg.HH);
-fprintf('K/Y                                     : %f \n', agg.KK / agg.YY);
-fprintf('w*L/Y                                   : %f \n', Params.w * agg.LL / agg.YY);
-fprintf('I/Y                                     : %f \n', agg.II / agg.YY);
+fprintf('Hours                                   : %f \n', ModelMoments.H);
+fprintf('K/Y                                     : %f \n', ModelMoments.K_to_Y);
+fprintf('w*L/Y                                   : %f \n', ModelMoments.wL_to_Y);
+fprintf('I/Y                                     : %f \n', ModelMoments.I_to_Y);
 fprintf('GE capital-market residual              : %e \n', GE_resid);
 disp('------------------------------------');
 disp('CV');
@@ -426,17 +426,17 @@ if do_save == 1
     fprintf(fid, '\\midrule\n');
 
     fprintf(fid, '$\\sigma$  & $\\operatorname{corr}(h,\\varepsilon)=%.2f$ & %.3f \\\\\n', ...
-        corr_h_z, Params.sigma);
+        ModelMoments.corr_h_z, Params.sigma);
     fprintf(fid, '$\\nu$     & $cv(h)=%.2f$ & %.3f \\\\\n', ...
-        cv.hours, Params.nu);
+        ModelMoments.cv_h, Params.nu);
     fprintf(fid, '$\\lambda$ & $H=%.2f$ & %.3f \\\\\n', ...
-        agg.HH, Params.lambda);
+        ModelMoments.H, Params.lambda);
     fprintf(fid, '$\\beta$   & $K/Y=%.2f$ & %.3f \\\\\n', ...
-        agg.KK / agg.YY, Params.beta);
+        ModelMoments.K_to_Y, Params.beta);
     fprintf(fid, '$\\theta$  & $wL/Y=%.2f$ & %.3f \\\\\n', ...
-        Params.w * agg.LL / agg.YY, Params.theta);
+        ModelMoments.wL_to_Y, Params.theta);
     fprintf(fid, '$\\delta$  & $I/Y=%.2f$ & %.3f \\\\\n', ...
-        agg.II / agg.YY, Params.delta);
+        ModelMoments.I_to_Y, Params.delta);
 
     % Close table
     fprintf(fid, '\\bottomrule\n');

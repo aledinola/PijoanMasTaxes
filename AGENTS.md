@@ -34,9 +34,11 @@ compact test case for VFI Toolkit workflows:
 - [fun_prices.m](fun_prices.m) maps capital-labor ratios to prices.
 - [fun_w_from_r.m](fun_w_from_r.m) gives the wage, and optionally the
   capital-labor ratio, implied by an interest rate.
-- [fun_custom_stats.m](fun_custom_stats.m) computes the six scalar calibration
-  moments used by `CalibrateBIHAModel`. [fun_corr.m](fun_corr.m) is a simple
-  weighted-correlation helper.
+- [fun_calibration_moments.m](fun_calibration_moments.m) defines the six scalar
+  calibration moments shared by calibration and final reporting.
+- [fun_custom_stats.m](fun_custom_stats.m) is the `CalibrateBIHAModel` callback
+  that computes toolkit statistics and calls `fun_calibration_moments`.
+- [fun_corr.m](fun_corr.m) is a simple weighted-correlation helper.
 
 ## Main Workflow
 
@@ -51,9 +53,9 @@ For clarity, all calibration targets are kept together as
 and `I_to_Y`. `fun_custom_stats.m` uses a local `simoptions.whichstats` setting
 for calibration speed; the final reporting call to
 `EvalFnOnAgentDist_AllStats_InfHorz` in `main.m` should keep full statistics
-available for tables and plots. When `do_save == 1` and `do_calib == 1`,
-`main.m` writes `results/calibration_summary.txt` with calibrated parameters,
-data targets, final model moments, weights, and the calibration objective value.
+available for tables and plots. When `do_save == 1`, `main.m` writes
+`results/calibration_summary.txt` with parameter values, data targets, final
+model moments, weights, and the calibration objective value when available.
 
 The `gridinterplayer` option should be set consistently through
 `vfoptions.gridinterplayer` and `simoptions.gridinterplayer`. Use
