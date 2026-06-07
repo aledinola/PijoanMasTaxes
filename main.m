@@ -6,11 +6,6 @@
 % The parameters are fixed at the Pijoan-Mas (2006) calibrated values.
 % The general equilibrium search is written in terms of r, which is
 % equivalent to searching over K/L through the firm's FOC.
-%
-% TODO: When we call EvalFnOnAgentDist_AllStats_InfHorz for calibration, we 
-% need only Mean and StdDeviation, so we should write simoptions.whichstats 
-% to save time. When we call EvalFnOnAgentDist_AllStats_InfHorz at the end,
-% we do need all statistics, so simoptions.whichstats should be modified
 
 clear,clc,close all,format long g
 
@@ -172,11 +167,6 @@ if do_calib == 1
     TargetMoments.CustomModelStats.wL_to_Y  = Targets.wL_to_Y;
     TargetMoments.CustomModelStats.I_to_Y   = Targets.I_to_Y;
 
-    % TODO: Are we sure we have to include targets like H,K_to_Y,wL_to_Y,
-    % I_to_Y as fields of CustomModelStats? I assumed that CustomModelStats 
-    % is only for statistics that are not part of the standard outputs of 
-    % EvalFnOnAgentDist_AllStats_InfHorz, so in this case only corr_h_z
-
     caliboptions = struct();
     caliboptions.verbose = 1;
     caliboptions.CustomModelStats = @fun_custom_stats;
@@ -197,9 +187,6 @@ if do_calib == 1
     calib_heteroagentoptions.constrainAtoBlimits.r = [0.001, 0.150];
 
     tStart = tic;
-    % TODO: Can CalibrateBIHAModel return also the values of the model
-    % moments used as targets in calibration? WITHOUT modifying
-    % CalibrateBIHAModel or any other toolkit function.
     [CalibParams, calibsummary] = CalibrateBIHAModel( ...
         CalibParamNames, TargetMoments, ...
         n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
@@ -216,12 +203,6 @@ if do_calib == 1
     end
 
     fprintf('Calibration objective value: %g\n', calibsummary.objvalue);
-    % TODO: Save final calibrated parameter values, model targets, data targets,
-    % calibration weights and calibration objective value to a txt file
-    % The txt file should have following blocks:
-    % Block 1: calibrated parameter values with name and numeric value
-    % Block 2: name of target, data value, model value and weight
-    % Block 3: final calibration objective value
 
 end
 
@@ -335,6 +316,45 @@ cv.hours    = AllStats.H.StdDeviation        / AllStats.H.Mean;
 cv.earnings = AllStats.earnings.StdDeviation / AllStats.earnings.Mean;
 cv.income   = AllStats.income.StdDeviation   / AllStats.income.Mean;
 cv.wealth   = AllStats.K.StdDeviation        / AllStats.K.Mean;
+
+%% Calibration target moments
+
+CalibMomentNames = {'corr_h_z','cv_h','H','K_to_Y','wL_to_Y','I_to_Y'};
+
+ModelMoments = struct();
+ModelMoments.corr_h_z = corr_h_z;
+ModelMoments.cv_h     = cv.hours;
+ModelMoments.H        = agg.HH;
+ModelMoments.K_to_Y   = agg.KK / agg.YY;
+ModelMoments.wL_to_Y  = Params.w * agg.LL / agg.YY;
+ModelMoments.I_to_Y   = agg.II / agg.YY;
+
+if do_save == 1 && do_calib == 1
+    fid = fopen(fullfile(results_dir, 'calibration_summary.txt'), 'w');
+
+    fprintf(fid, 'Calibrated parameter values\n');
+    fprintf(fid, '---------------------------\n');
+    calib_param_names = fieldnames(CalibParams);
+    for ii = 1:numel(calib_param_names)
+        name_ii = calib_param_names{ii};
+        fprintf(fid, '%-12s %.12g\n', name_ii, Params.(name_ii));
+    end
+
+    fprintf(fid, '\nCalibration targets\n');
+    fprintf(fid, '-------------------\n');
+    fprintf(fid, '%-12s %16s %16s %16s\n', 'moment', 'data', 'model', 'weight');
+    for ii = 1:numel(CalibMomentNames)
+        name_ii = CalibMomentNames{ii};
+        fprintf(fid, '%-12s %16.12g %16.12g %16.12g\n', ...
+            name_ii, Targets.(name_ii), ModelMoments.(name_ii), caliboptions.weights(ii));
+    end
+
+    fprintf(fid, '\nCalibration objective value\n');
+    fprintf(fid, '---------------------------\n');
+    fprintf(fid, '%.12g\n', calibsummary.objvalue);
+
+    fclose(fid);
+end
 
 %% Display results on screen
 
