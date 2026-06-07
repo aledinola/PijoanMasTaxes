@@ -73,3 +73,6 @@ Codex may freely modify files in this replication repo. Before modifying any
 toolkit file, Codex must ask permission and create or switch to a toolkit-repo
 branch named `ale`, so changes stay separate from Robert Kirkby's official repo
 history.
+
+Here there is some detailed info on how grisinterplayer is done in the toolkit: [robertdkirkby/GridInterpolationLayer](https://github.com/robertdkirkby/GridInterpolationLayer),
+also available on my machine here: "C:\Users\aledi\OneDrive\Documents\GitHub\GridInterpolationLayer"
