@@ -25,6 +25,7 @@ end
 
 %% Set computational options
 
+do_calib  = 0;   % 0=solve once, 1=calibrate six parameters in GE
 do_GE     = 0;   % 0=solve at fixed K/L, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
@@ -72,7 +73,7 @@ Params.theta  = 0.64;  % Labor share in Cobb-Douglas
 Params.delta  = 0.083; % Capital depreciation rate
 
 % Paper targets used to report calibration and data comparisons.
-%Targets.corr_h_z = 0.02;
+Targets.corr_h_z = 0.02;
 Targets.cv_h     = 0.22;
 Targets.H        = 0.33;
 Targets.K_to_Y   = 3.00;
@@ -149,13 +150,59 @@ FnsToEvaluate.H = @(d, aprime, a, z) d;   % Hours of work
 GeneralEqmEqns.CapitalMarket = @(r, K, L, theta, delta) ...
     r - ((1 - theta) .* (K ./ L).^(-theta) - delta);
 
-% Only the capital-market condition is solved here. The paper's beta, sigma,
-% lambda, and nu are fixed in Params rather than estimated inside this script.
 GEPriceParamNames = {'r'};
 
-%% Solve for the stationary general equilibrium 
+%% Calibrate or solve for the stationary general equilibrium
 
-if do_GE == 1
+if do_calib == 1
+    fprintf('Calibrating the stationary general equilibrium...\n');
+
+    CalibParamNames = {'beta','sigma','nu','lambda','theta','delta'};
+    ParametrizeParamsFn = [];
+
+    TargetMoments = struct();
+    TargetMoments.CustomModelStats.corr_h_z = Targets.corr_h_z;
+    TargetMoments.CustomModelStats.cv_h     = Targets.cv_h;
+    TargetMoments.CustomModelStats.H        = Targets.H;
+    TargetMoments.CustomModelStats.K_to_Y   = Targets.K_to_Y;
+    TargetMoments.CustomModelStats.wL_to_Y  = Targets.wL_to_Y;
+    TargetMoments.CustomModelStats.I_to_Y   = Targets.I_to_Y;
+
+    caliboptions = struct();
+    caliboptions.CustomModelStats = @fun_custom_stats;
+    caliboptions.jointoptimization = 1;
+    caliboptions.fminalgo = 8;
+    caliboptions.metric = 'sum_squared';
+    caliboptions.weights = ones(6,1);
+    caliboptions.constrainAtoB = CalibParamNames(:);
+    caliboptions.constrainAtoBlimits.beta   = [0.800, 0.995];
+    caliboptions.constrainAtoBlimits.sigma  = [1.010, 5.000];
+    caliboptions.constrainAtoBlimits.nu     = [1.010, 10.00];
+    caliboptions.constrainAtoBlimits.lambda = [0.010, 5.000];
+    caliboptions.constrainAtoBlimits.theta  = [0.100, 0.950];
+    caliboptions.constrainAtoBlimits.delta  = [0.001, 0.200];
+
+    calib_heteroagentoptions = heteroagentoptions;
+    calib_heteroagentoptions.constrainAtoB = GEPriceParamNames(:);
+    calib_heteroagentoptions.constrainAtoBlimits.r = [0.001, 0.150];
+
+    [CalibParams, calibsummary] = CalibrateBIHAModel( ...
+        CalibParamNames, TargetMoments, ...
+        n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
+        ReturnFn, Params, DiscountFactorParamNames, ParametrizeParamsFn, ...
+        GEPriceParamNames, FnsToEvaluate, GeneralEqmEqns, ...
+        calib_heteroagentoptions, caliboptions, vfoptions, simoptions);
+
+    calib_param_names = fieldnames(CalibParams);
+    for ii = 1:numel(calib_param_names)
+        name_ii = calib_param_names{ii};
+        Params.(name_ii) = CalibParams.(name_ii);
+    end
+
+    fprintf('Calibration objective value: %g\n', calibsummary.objvalue);
+end
+
+if do_calib == 0 && do_GE == 1
     fprintf('Calculating the stationary general equilibrium...\n');
 
     [p_eqm, ~, GeneralEqmCondn] = HeteroAgentStationaryEqm_InfHorz( ...
@@ -250,18 +297,6 @@ Corr=EvalFnOnAgentDist_CrossSectionCovarCorr_InfHorz(StatDist,Policy,FnsToEvalua
 corr_h_z = Corr.hours.CorrelationWith.productivity;
 corr_a_z = Corr.wealth.CorrelationWith.productivity;
 
-% --- User-written function for correlation
-z_mat     = repmat(z_grid', n_a, 1);
-corr_h_z2 = fun_corr(pol_d, z_mat, StatDist);
-corr_a_z2 = fun_corr(repmat(a_grid,[1,n_z]), z_mat, StatDist);
-
-if abs(corr_h_z-corr_h_z2)>1e-6
-    warning('corr_h_z')
-end
-if abs(corr_a_z-corr_a_z2)>1e-6
-    warning('corr_a_z')
-end
-
 %% Aggregate moments and dispersion
 
 agg.KK = AllStats.K.Mean;
@@ -269,6 +304,8 @@ agg.LL = AllStats.L.Mean;
 agg.HH = AllStats.H.Mean;
 agg.YY = agg.KK^(1 - Params.theta) * agg.LL^Params.theta;
 agg.II = Params.delta * agg.KK;
+GE_resid = GeneralEqmEqns.CapitalMarket(Params.r, agg.KK, agg.LL, ...
+    Params.theta, Params.delta);
 
 % Coefficients of variation
 cv.hours    = AllStats.H.StdDeviation        / AllStats.H.Mean;
@@ -299,6 +336,7 @@ fprintf('Hours                                   : %f \n', agg.HH);
 fprintf('K/Y                                     : %f \n', agg.KK / agg.YY);
 fprintf('w*L/Y                                   : %f \n', Params.w * agg.LL / agg.YY);
 fprintf('I/Y                                     : %f \n', agg.II / agg.YY);
+fprintf('GE capital-market residual              : %e \n', GE_resid);
 disp('------------------------------------');
 disp('CV');
 fprintf('CV(Hours)                               : %f \n', cv.hours);
