@@ -1,0 +1,23 @@
+Parameter values
+----------------
+beta         0.945
+sigma        1.458
+nu           2.833
+lambda       0.856
+theta        0.64
+delta        0.083
+r            0.03737578125
+
+Calibration targets
+-------------------
+moment                   data            model           weight
+corr_h_z                 0.02  0.0192868686064                1
+cv_h                     0.22   0.203225226956                1
+H                        0.33   0.355353822534                1
+K_to_Y                      3    2.99222363804                1
+wL_to_Y                  0.64   0.639808821243                1
+I_to_Y                   0.25   0.248354561957                1
+
+Calibration objective value
+---------------------------
+not computed (do_calib=0)

@@ -3,9 +3,10 @@
 % Josep Pijoan-Mas, 2006. "Precautionary Savings or Working Longer Hours?"
 % Specifically, it reproduces Table 1, Table 2 and Figure 1.
 %
-% The script can either solve at fixed parameter values or calibrate selected
-% parameters in general equilibrium. The GE search is written in terms of r,
-% which is equivalent to searching over K/L through the firm's FOC.
+% The script can either solve the model at fixed parameter values or 
+% calibrate selected parameters in general equilibrium. The GE search is 
+% written in terms of r, which is equivalent to searching over K/L through 
+% the firm's FOC.
 
 clear,clc,close all,format long g
 
@@ -16,7 +17,7 @@ mypath = fullfile('..','VFIToolkit-matlab');
 addpath(genpath(mypath))
 
 % Flag for saving output (tables, figures, and calibration summary)
-do_save     = 0;              % Set to 1 to save outputs
+do_save     = 1;              % Set to 1 to save outputs
 results_dir = 'results';      % Folder for saved output
 
 if do_save == 1 && ~exist(results_dir, 'dir')
@@ -25,7 +26,7 @@ end
 
 %% Set computational options
 
-do_calib  = 1;   % 0=solve once, 1=calibrate six parameters and r in GE
+do_calib  = 0;   % 0=solve once, 1=calibrate six parameters and r in GE
 do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
@@ -64,10 +65,10 @@ heteroagentoptions.maxiter                  = 100;
 
 % --- Preference parameters: initial guesses for calibration, or fixed values
 %     when do_calib == 0. Trailing comments report the paper values.
-Params.beta   = 0.96; % paper: 0.945, discount factor
-Params.sigma  = 1.3;  % paper: 1.458, coefficient of relative risk aversion
-Params.nu     = 2.5;  % paper: 2.833, curvature of labor disutility
-Params.lambda = 0.5;  % paper: 0.856, weight of labor in utility
+Params.beta   = 0.945;  % paper: 0.945, discount factor
+Params.sigma  = 1.458;  % paper: 1.458, coefficient of relative risk aversion
+Params.nu     = 2.833;  % paper: 2.833, curvature of labor disutility
+Params.lambda = 0.856;  % paper: 0.856, weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
@@ -191,8 +192,7 @@ if do_calib == 1
     calib_heteroagentoptions.constrainAtoBlimits.r = [0.001, 0.150];
 
     tStart = tic;
-    [CalibParams, calibsummary] = CalibrateBIHAModel( ...
-        CalibParamNames, TargetMoments, ...
+    [CalibParams, calibsummary] = CalibrateBIHAModel(CalibParamNames, TargetMoments, ...
         n_d, n_a, n_z, d_grid, a_grid, z_grid, pi_z, ...
         ReturnFn, Params, DiscountFactorParamNames, ParametrizeParamsFn, ...
         GEPriceParamNames, FnsToEvaluate, GeneralEqmEqns, ...
