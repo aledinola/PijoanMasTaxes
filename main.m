@@ -6,6 +6,10 @@
 % The script can either solve at fixed parameter values or calibrate selected
 % parameters in general equilibrium. The GE search is written in terms of r,
 % which is equivalent to searching over K/L through the firm's FOC.
+% 
+% do_calib=0, do_GE=1: Solve the model in GE for given parameters
+% do_calib=0, do_GE=0: Solve the model in PE for given parameters
+% do_calib=1, do_GE=any: Calibrate parameters in GE
 
 clear,clc,close all,format long g
 
@@ -25,8 +29,8 @@ end
 
 %% Set computational options
 
-do_calib  = 1;   % 0=solve once, 1=calibrate six parameters and r in GE
-do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
+do_calib  = 0;   % 0=solve once, 1=calibrate six parameters and r in GE
+do_GE     = 0;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
@@ -41,7 +45,7 @@ vfoptions.howards       = 80;   % Number of iterations for Howard
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid, 1=a' on finer grid
+vfoptions.gridinterplayer = 0;  % 0=a' on coarse grid, 1=a' on finer grid
 vfoptions.ngridinterp     = 15; % number of extra points between coarse-grid points
 %vfoptions.divideandconquer = 0;
 
