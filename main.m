@@ -7,6 +7,10 @@
 % calibrate selected parameters in general equilibrium. The GE search is 
 % written in terms of r, which is equivalent to searching over K/L through 
 % the firm's FOC.
+%
+% do_calib=0, do_GE=0: Solve model in PE (r is fixed) at given parameters
+% do_calib=0, do_GE=1: Solve model in GE (r adjusts to clear capital market) at given parameters. 
+% do_calib=1:          Calibrate parameters and find GE all in one.
 
 clear,clc,close all,format long g
 
@@ -27,7 +31,7 @@ end
 %% Set computational options
 
 do_calib  = 0;   % 0=solve once, 1=calibrate six parameters and r in GE
-do_GE     = 0;   % 0=solve at fixed r, 1=solve GE over r
+do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
 n_d       = 51;  % No. grid points for labor supply
@@ -42,7 +46,7 @@ vfoptions.howards       = 80;   % Number of iterations for Howard
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 0;  % 0=a' on coarse grid, 1=a' on finer grid
+vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid, 1=a' on finer grid
 vfoptions.ngridinterp     = 15; % number of extra points between coarse-grid points
 %vfoptions.divideandconquer = 0;
 
@@ -65,10 +69,10 @@ heteroagentoptions.maxiter                  = 100;
 
 % --- Preference parameters: initial guesses for calibration, or fixed values
 %     when do_calib == 0. Trailing comments report the paper values.
-Params.beta   = 0.96; % paper: 0.945, discount factor
-Params.sigma  = 1.3;  % paper: 1.458, coefficient of relative risk aversion
-Params.nu     = 2.5;  % paper: 2.833, curvature of labor disutility
-Params.lambda = 0.5;  % paper: 0.856, weight of labor in utility
+Params.beta   = 0.945; % paper: 0.945, discount factor
+Params.sigma  = 1.458;  % paper: 1.458, coefficient of relative risk aversion
+Params.nu     = 2.833;  % paper: 2.833, curvature of labor disutility
+Params.lambda = 0.856;  % paper: 0.856, weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
