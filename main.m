@@ -11,6 +11,8 @@
 % do_calib=0, do_GE=0: Solve model in PE (r is fixed) at given parameters
 % do_calib=0, do_GE=1: Solve model in GE (r adjusts to clear capital market) at given parameters. 
 % do_calib=1:          Calibrate parameters and find GE all in one.
+%                    Set caliboptions.progressreport=1 below to save a
+%                    calibration progress log in results/calibration_progress.txt.
 
 clear,clc,close all,format long g
 
@@ -30,7 +32,7 @@ end
 
 %% Set computational options
 
-do_calib  = 0;   % 0=solve once, 1=calibrate six parameters and r in GE
+do_calib  = 1;   % 0=solve once, 1=calibrate six parameters and r in GE
 do_GE     = 1;   % 0=solve at fixed r, 1=solve GE over r
 do_pijoan = 1;   % If 1, load shocks from Pijoan-Mas files
 n_a       = 600; % No. grid points for assets
@@ -62,7 +64,7 @@ heteroagentoptions                          = struct();
 heteroagentoptions.verbose                  = 1;      % 1 = print progress
 heteroagentoptions.toleranceGEprices        = 1e-4;   % default 1e-4
 heteroagentoptions.toleranceGEcondns        = 1e-4;   % default 1e-4
-heteroagentoptions.fminalgo                 = 1;      % 0=fzero, 1=fminsearch, 8=lsqnonlin
+heteroagentoptions.fminalgo                 = 1;      % 1=fminsearch, 8=lsqnonlin, 4=CMA-ES/global search
 heteroagentoptions.maxiter                  = 100;
 
 %% Set economic parameters
@@ -70,9 +72,9 @@ heteroagentoptions.maxiter                  = 100;
 % --- Preference parameters: initial guesses for calibration, or fixed values
 %     when do_calib == 0. Trailing comments report the paper values.
 Params.beta   = 0.945; % paper: 0.945, discount factor
-Params.sigma  = 1.458;  % paper: 1.458, coefficient of relative risk aversion
-Params.nu     = 2.833;  % paper: 2.833, curvature of labor disutility
-Params.lambda = 0.856;  % paper: 0.856, weight of labor in utility
+Params.sigma  = 1.458; % paper: 1.458, coefficient of relative risk aversion
+Params.nu     = 2.833; % paper: 2.833, curvature of labor disutility
+Params.lambda = 0.856; % paper: 0.856, weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
@@ -178,9 +180,11 @@ if do_calib == 1
 
     caliboptions = struct();
     caliboptions.verbose = 1;
+    caliboptions.progressreport = 1; % 1=write progress when calibration objective improves
+    caliboptions.progressreportfilename = fullfile(results_dir, 'calibration_progress.txt');
     caliboptions.CustomModelStats = @fun_custom_stats;
     caliboptions.jointoptimization = 1;
-    caliboptions.fminalgo = 8;
+    caliboptions.fminalgo = 8; % 1=fminsearch, 8=lsqnonlin, 4=CMA-ES/global search
     caliboptions.metric = 'sum_squared';
     caliboptions.weights = CalibWeights;
     caliboptions.constrainAtoB = CalibParamNames(:);

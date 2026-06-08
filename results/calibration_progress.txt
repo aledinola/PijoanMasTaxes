@@ -1,0 +1,172 @@
+CalibrateBIHAModel progress report
+Started: 2026-06-08 13:49:12
+Only new best objective values are reported.
+
+New best objective
+Evaluation: 1
+Timestamp: 2026-06-08 13:49:13
+Objective: 0.005024649223500906
+Parameter values:
+    beta: 0.945
+    sigma: 1.458
+    nu: 2.833
+    lambda: 0.8560000000000001
+    theta: 0.64
+    delta: 0.083
+    r: 0.037
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.01217689211305187, target 0.02
+    CustomModelStats.cv_h: model 0.1998336727608556, target 0.22
+    CustomModelStats.H: model 0.3564179627812684, target 0.33
+    CustomModelStats.K_to_Y: model 2.943083637115059, target 3
+    CustomModelStats.wL_to_Y: model 0.6469328657908955, target 0.64
+    CustomModelStats.I_to_Y: model 0.2442759418805499, target 0.25
+GE price values:
+    r: 0.037
+General equilibrium residuals:
+    CapitalMarket: -0.002320682790003172
+
+New best objective
+Evaluation: 2
+Timestamp: 2026-06-08 13:49:15
+Objective: 0.0009421654498280088
+Parameter values:
+    beta: 0.9453948262698868
+    sigma: 1.458
+    nu: 2.833
+    lambda: 0.8560000000000001
+    theta: 0.64
+    delta: 0.083
+    r: 0.037
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.02153280529283889, target 0.02
+    CustomModelStats.cv_h: model 0.203101726702583, target 0.22
+    CustomModelStats.H: model 0.3553696228726225, target 0.33
+    CustomModelStats.K_to_Y: model 3.002929193222047, target 3
+    CustomModelStats.wL_to_Y: model 0.6396487647203305, target 0.64
+    CustomModelStats.I_to_Y: model 0.2492431230374299, target 0.25
+GE price values:
+    r: 0.037
+General equilibrium residuals:
+    CapitalMarket: 0.0001170534381692914
+
+New best objective
+Evaluation: 17
+Timestamp: 2026-06-08 13:49:30
+Objective: 7.479035844441271e-06
+Parameter values:
+    beta: 0.9454471654505545
+    sigma: 1.459316037329529
+    nu: 2.835059301574856
+    lambda: 1.053906217134599
+    theta: 0.6399484477407869
+    delta: 0.08333337959770608
+    r: 0.03660534921593452
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.0181385085798845, target 0.02
+    CustomModelStats.cv_h: model 0.2195477138132528, target 0.22
+    CustomModelStats.H: model 0.3316902005670289, target 0.33
+    CustomModelStats.K_to_Y: model 3.000865229196578, target 3
+    CustomModelStats.wL_to_Y: model 0.6400800766572171, target 0.64
+    CustomModelStats.I_to_Y: model 0.2500722412661957, target 0.25
+GE price values:
+    r: 0.03660534921593452
+General equilibrium residuals:
+    CapitalMarket: -4.385112901472005e-05
+
+New best objective
+Evaluation: 25
+Timestamp: 2026-06-08 13:49:38
+Objective: 4.391642810729072e-06
+Parameter values:
+    beta: 0.9455295440806921
+    sigma: 1.445001310197087
+    nu: 2.861310434773296
+    lambda: 1.051660199052065
+    theta: 0.6400063742581237
+    delta: 0.08333333338677372
+    r: 0.03667182219935359
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.02099065591325617, target 0.02
+    CustomModelStats.cv_h: model 0.2201251745549516, target 0.22
+    CustomModelStats.H: model 0.3298618755181313, target 0.33
+    CustomModelStats.K_to_Y: model 3.001663110261218, target 3
+    CustomModelStats.wL_to_Y: model 0.6397850577786328, target 0.64
+    CustomModelStats.I_to_Y: model 0.2501385926821782, target 0.25
+GE price values:
+    r: 0.03667182219935359
+General equilibrium residuals:
+    CapitalMarket: 7.376671332736534e-05
+
+New best objective
+Evaluation: 33
+Timestamp: 2026-06-08 13:49:46
+Objective: 4.021874038689279e-06
+Parameter values:
+    beta: 0.9454937012882687
+    sigma: 1.448190287031664
+    nu: 2.861903080378347
+    lambda: 1.052378374328707
+    theta: 0.6399969796728858
+    delta: 0.08333333333338647
+    r: 0.0366633117278634
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.01910213166673853, target 0.02
+    CustomModelStats.cv_h: model 0.2198102954430491, target 0.22
+    CustomModelStats.H: model 0.3300220327235265, target 0.33
+    CustomModelStats.K_to_Y: model 2.998375881823546, target 3
+    CustomModelStats.wL_to_Y: model 0.6402050474599109, target 0.64
+    CustomModelStats.I_to_Y: model 0.2498646568187881, target 0.25
+GE price values:
+    r: 0.0366633117278634
+General equilibrium residuals:
+    CapitalMarket: -6.936217603098482e-05
+
+New best objective
+Evaluation: 41
+Timestamp: 2026-06-08 13:49:54
+Objective: 3.358294246148939e-07
+Parameter values:
+    beta: 0.9455059712156906
+    sigma: 1.447473035226541
+    nu: 2.86059077689366
+    lambda: 1.052457360977862
+    theta: 0.6400000717291408
+    delta: 0.08333295852492338
+    r: 0.03666753091632199
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.02000671659048116, target 0.02
+    CustomModelStats.cv_h: model 0.2200055248474263, target 0.22
+    CustomModelStats.H: model 0.3299763599838959, target 0.33
+    CustomModelStats.K_to_Y: model 3.000530858044369, target 3
+    CustomModelStats.wL_to_Y: model 0.639934837687285, target 0.64
+    CustomModelStats.I_to_Y: model 0.2500431135461642, target 0.25
+GE price values:
+    r: 0.03666753091632199
+General equilibrium residuals:
+    CapitalMarket: 2.174391169820766e-05
+
+New best objective
+Evaluation: 49
+Timestamp: 2026-06-08 13:50:02
+Objective: 5.590842512119035e-08
+Parameter values:
+    beta: 0.9455030919387456
+    sigma: 1.447402839215763
+    nu: 2.859677233102068
+    lambda: 1.052655449924112
+    theta: 0.6399998124757905
+    delta: 0.0833333329442448
+    r: 0.03666647808097931
+Model and target moments:
+    CustomModelStats.corr_h_z: model 0.01999221555249907, target 0.02
+    CustomModelStats.cv_h: model 0.2200223687946467, target 0.22
+    CustomModelStats.H: model 0.3299941533407194, target 0.33
+    CustomModelStats.K_to_Y: model 2.999784537947013, target 3
+    CustomModelStats.wL_to_Y: model 0.6400264238667074, target 0.64
+    CustomModelStats.I_to_Y: model 0.249982043661736, target 0.25
+GE price values:
+    r: 0.03666647808097931
+General equilibrium residuals:
+    CapitalMarket: -8.870588484699571e-06
+
