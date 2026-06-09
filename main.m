@@ -20,7 +20,7 @@ mypath = fullfile('..','VFIToolkit-matlab');
 addpath(genpath(mypath))
 
 % Flag for saving output (tables, figures, and calibration summary)
-do_save     = 0;              % Set to 1 to save outputs
+do_save     = 1;              % Set to 1 to save outputs
 results_dir = 'results';      % Folder for saved output
 
 if do_save == 1 && ~exist(results_dir, 'dir')
@@ -45,7 +45,7 @@ vfoptions.howards       = 80;   % Number of iterations for Howard
 vfoptions.maxhowards    = 0;
 vfoptions.howardsgreedy = 0;
 vfoptions.howardssparse = 0;
-vfoptions.gridinterplayer = 0;  % 0=a' on coarse grid, 1=a' on finer grid
+vfoptions.gridinterplayer = 1;  % 0=a' on coarse grid, 1=a' on finer grid
 vfoptions.ngridinterp     = 15; % number of extra points between coarse-grid points
 %vfoptions.divideandconquer = 0;
 
@@ -68,10 +68,10 @@ heteroagentoptions.maxiter                  = 100;
 
 % --- Preference parameters: initial guesses for calibration, or fixed values
 %     when do_calib == 0. Trailing comments report the paper values.
-Params.beta   = 0.96; % paper: 0.945, discount factor
-Params.sigma  = 1.3;  % paper: 1.458, coefficient of relative risk aversion
-Params.nu     = 2.5;  % paper: 2.833, curvature of labor disutility
-Params.lambda = 0.5;  % paper: 0.856, weight of labor in utility
+Params.beta   = 0.945; % paper: 0.945, discount factor
+Params.sigma  = 1.458;  % paper: 1.458, coefficient of relative risk aversion
+Params.nu     = 2.833;  % paper: 2.833, curvature of labor disutility
+Params.lambda = 0.856;  % paper: 0.856, weight of labor in utility
 
 % --- Technology parameters
 Params.theta  = 0.64;  % Labor share in Cobb-Douglas
@@ -88,10 +88,8 @@ CalibMomentNames = {'corr_h_z','cv_h','H','K_to_Y','wL_to_Y','I_to_Y'};
 CalibParamNames = {'beta','sigma','nu','lambda','theta','delta'};
 CalibWeights = ones(numel(CalibMomentNames),1);
 
-% Fixed-price runs start from the paper target K/Y=3. In GE and calibration
-% runs, K/Y=(K/L)^theta is used only to construct the initial r.
-Params.K_to_L = Targets.K_to_Y^(1 / Params.theta);
-[Params.r, Params.w] = fun_prices(Params.K_to_L, Params.theta, Params.delta);
+% Initial guess for interest rate (GE variable)
+Params.r = 0.03737578125;
 
 % --- Parameters for AR(1) labor productivity z (not used if do_pijoan = 1)
 Params.rho_z = 0.92;
